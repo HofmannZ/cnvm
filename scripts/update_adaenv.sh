@@ -19,5 +19,5 @@ sed -i ~/.adaenv \
     -e "s/NODE_CONFIG.*/NODE_CONFIG=${CURRENT_NODE_CONFIG}/g" \
     -e "s/NODE_PORT.*/NODE_PORT=${CURRENT_NODE_PORT}/g"
 
-echo "📂 Sourcing adaenv..."
+echo "📡 Sourcing adaenv..."
 source ~/.adaenv

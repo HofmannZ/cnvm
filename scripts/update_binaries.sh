@@ -8,7 +8,7 @@ if (
     echo "📋 Using default version ${CARDANO_NODE_BINARIES_VERSION}"
 fi
 
-echo "💾 Saving current directory..."
+echo "💾 Saving directory..."
 CURRRENT_DIR=$(pwd)
 
 cd
@@ -45,7 +45,7 @@ sed -i ${NODE_CONFIG}-config.json \
     -e "s/127.0.0.1/0.0.0.0/g" \
     -e 's+"TurnOnLogging": true,+"TurnOnLogging": true,\n  "TestEnableDevelopmentNetworkProtocols": true,\n  "EnableP2P": true,\n  "MaxConcurrencyBulkSync": 2,\n  "MaxConcurrencyDeadline": 4,\n  "TargetNumberOfRootPeers": 50,\n  "TargetNumberOfKnownPeers": 50,\n  "TargetNumberOfEstablishedPeers": 25,\n  "TargetNumberOfActivePeers": 10,+'
 
-echo "✅ Restoring current directory..."
+echo "✅ Restoring directory..."
 cd $CURRRENT_DIR
 
 echo "🗂 Downloading database snapshot..."
