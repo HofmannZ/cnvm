@@ -19,7 +19,6 @@ echo "💽 Downloading the latest binaries..."
 wget -O cardano-node-${CARDANO_NODE_BINARIES_VERSION}.zip https://github.com/armada-alliance/cardano-node-binaries/blob/main/static-binaries/${CARDANO_NODE_BINARIES_VERSION}.zip?raw=true
 unzip cardano-node-${CARDANO_NODE_BINARIES_VERSION}.zip
 
-cardano-service status
 cardano-service stop
 
 mv cardano-node/* ~/.local/bin
