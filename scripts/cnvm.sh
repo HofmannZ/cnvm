@@ -19,6 +19,9 @@ yellow() {
 # arguments
 COMMAND_NAME=$1
 
+# config
+DEFAULT_VERSION="1.34.1"
+
 if [[ "$COMMAND_NAME" != "install" && "$COMMAND_NAME" != "update-config" && "$COMMAND_NAME" != "upgrade" ]]; then
     echo $(red "💥 Incorrect usage of the cnvm command!")
     echo $(yellow "📚 Usage:")
@@ -47,8 +50,6 @@ install_fn() {
         sleep 10
     fi
 
-    # config
-    DEFAULT_VERSION="1.34.1"
     BINARIES_VERSION=$2
 
     if (
