@@ -53,6 +53,7 @@ install_fn() {
         # function that will get executed when the user presses Ctrl+C
         function handle_exit() {
             echo $(green "👍 Canceled installation.")
+            exit 0
         }
 
         # assign the handle_exit function to the SIGINT signal
@@ -103,6 +104,7 @@ install_fn() {
 
     if [[ "$IS_BUNDELD_COMMAND" != "true" ]]; then
         echo $(green "✅ All done!")
+        exit 0
     fi
 }
 
@@ -147,6 +149,7 @@ update_config_fn() {
 
     if [[ "$IS_BUNDELD_COMMAND" != "true" ]]; then
         echo $(green "✅ All done!")
+        exit 0
     fi
 }
 
@@ -168,6 +171,7 @@ if [[ "$COMMAND_NAME" == "upgrade" ]]; then
     # function that will get executed when the user presses Ctrl+C
     function handle_exit() {
         echo $(green "👍 Canceled upgrade.")
+        exit 0
     }
 
     # assign the handle_exit function to the SIGINT signal
@@ -206,4 +210,5 @@ if [[ "$COMMAND_NAME" == "upgrade" ]]; then
     cardano-service start
 
     echo $(green "✅ All done!")
+    exit 0
 fi
