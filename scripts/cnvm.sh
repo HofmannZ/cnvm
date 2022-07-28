@@ -39,6 +39,15 @@ if [[ "$COMMAND_NAME" != "install" && "$COMMAND_NAME" != "update-config" && "$CO
     exit 1
 fi
 
+# function that will get executed when the user presses Ctrl+C
+function handle_exit() {
+    echo $(green "👍 Canceled.")
+    exit 0
+}
+
+# assign the handle_exit function to the SIGINT signal
+trap handle_exit SIGINT
+
 # --------------------
 # ---- FUNCTIONS -----
 # --------------------
@@ -50,15 +59,6 @@ install_fn() {
     IS_BUNDELD_COMMAND=$1
 
     if [[ "$IS_BUNDELD_COMMAND" != "true" ]]; then
-        # function that will get executed when the user presses Ctrl+C
-        function handle_exit() {
-            echo $(green "👍 Canceled installation.")
-            exit 0
-        }
-
-        # assign the handle_exit function to the SIGINT signal
-        trap handle_exit SIGINT
-
         echo ""
         echo $(yellow "-------------------------------------------------------")
         echo $(yellow "Make sure you stoped the cardano-node servie! Run:     ")
@@ -167,15 +167,6 @@ fi
 
 if [[ "$COMMAND_NAME" == "upgrade" ]]; then
     echo $(green "🧰 Upgrading Cardano node...")
-
-    # function that will get executed when the user presses Ctrl+C
-    function handle_exit() {
-        echo $(green "👍 Canceled upgrade.")
-        exit 0
-    }
-
-    # assign the handle_exit function to the SIGINT signal
-    trap handle_exit SIGINT
 
     echo ""
     echo $(yellow "-------------------------------------------------------")
