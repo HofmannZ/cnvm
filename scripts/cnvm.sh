@@ -234,35 +234,29 @@ while (($#)); do
 
     --help | -h)
         help_fn
-        exit 0
         ;;
 
     --version | -v)
         version_fn
-        exit 0
         ;;
 
     install)
         shift
         version_fn --stand-alone $*
-        exit 0
         ;;
 
     update-config)
         shift
         update_config_fn --stand-alone $*
-        exit 0
         ;;
 
     upgrade)
         shift
         upgrade_fn $*
-        exit 0
         ;;
 
     *)
         bad_input_fn "Option/command not recognized."
-        exit 1
         ;;
     esac
 done
