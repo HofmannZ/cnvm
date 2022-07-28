@@ -12,9 +12,6 @@ export CARDANO_NODE_SOCKET_PATH=${NODE_HOME}/db/socket
 
 export NODE_BUILD_NUM=14528927
 
-export GIT_HOME=${HOME}/git
-export CARDANO_SPO_TOOLS=${GIT_HOME}/cardano-spo-tools
-
 cardano-service() {
     #do things with parameters like $1 such as
     sudo systemctl "$1" cardano-node.service
@@ -24,5 +21,15 @@ cardano-submit() {
     #do things with parameters like $1 such as
     sudo systemctl "$1" cardano-submit.service
 }
+
+# config for https://github.com/gitmachtl/scripts
+export PATH="$HOME/stakepoolscripts/bin:$PATH"
+export MAGIC=764824073
+export BYRON_SHELLEY_EPOCHS=208
+export CONFIG_NET=${NODE_CONFIG}
+
+# config for https://github.com/HofmannZ/cardano-spo-tools
+export GIT_HOME=${HOME}/git
+export CARDANO_SPO_TOOLS=${GIT_HOME}/cardano-spo-tools
 
 source $CARDANO_SPO_TOOLS/bash/aliases.sh
