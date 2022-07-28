@@ -3,4 +3,4 @@ alias sysup='echo "📋 Updating system packages..." && sudo apt update && sudo 
 alias nodeup='. ~/git/cardano-spo-tools/scripts/update_binaries.sh'
 alias spoup='. ~/git/cardano-spo-tools/scripts/update_self.sh'
 
-alias cnvm='(){ . ~/git/cardano-spo-tools/scripts/cnvm.sh $@; }'
+alias cnvm='_cnvm() { ~/git/cardano-spo-tools/scripts/cnvm.sh $@; }; _cnvm'
