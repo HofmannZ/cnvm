@@ -22,6 +22,13 @@ cardano-submit() {
     sudo systemctl "$1" cardano-submit.service
 }
 
+cardano-monitor() {
+    #do things with parameters like $1 such as
+    # sudo systemctl "$1" prometheus.service
+    sudo systemctl "$1" prometheus-node-exporter.service
+    # sudo systemctl "$1" grafana-server.service
+}
+
 # config for https://github.com/gitmachtl/scripts
 export PATH="$HOME/stakepoolscripts/bin:$PATH"
 export MAGIC=764824073
