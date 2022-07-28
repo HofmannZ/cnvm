@@ -1,11 +1,11 @@
-echo "💾 Saving partial config..."
+echo "💾 Saving config..."
 CURRENT_NODE_CONFIG=$NODE_CONFIG
 CURRENT_NODE_PORT=$NODE_PORT
 
 echo "📂 Copying adaenv..."
-cp $DOTFILES/.adaenv ~/.adaenv
+cp $CARDANO_SPO_TOOLS/.adaenv ~/.adaenv
 
-echo "✅ Restoring partial config..."
+echo "✅ Restoring config..."
 sed -i ${HOME}/.adaenv \
     -e "s/NODE_CONFIG.*/NODE_CONFIG=${CURRENT_NODE_CONFIG}/g" \
     -e "s/NODE_PORT.*/NODE_PORT=${CURRENT_NODE_PORT}/g"
