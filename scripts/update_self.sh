@@ -7,7 +7,7 @@ CURRRENT_DIR=$(pwd)
 echo "📂 Pulling latest changes..."
 cd $CARDANO_SPO_TOOLS
 git pull
-adaenvup
+. ./scripts/update_adaenv.sh
 
 echo "✅ Restoring directory..."
 cd $CURRRENT_DIR
