@@ -142,6 +142,9 @@ if [[ "$COMMAND_NAME" == "upgrade" ]]; then
     install_fn true $2
     update_config_fn true
 
+    echo $(green "🗑 Deleting old db...")
+    rm -r $DB_PATH
+
     echo "📦 Downloading database snapshot..."
     curl -o - https://downloads.csnapshots.io/mainnet/$(curl -s https://downloads.csnapshots.io/mainnet/mainnet-db-snapshot.json | jq -r .[].file_name) | lz4 -c -d - | tar -x -C $NODE_HOME
 
