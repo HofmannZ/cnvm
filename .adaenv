@@ -1,0 +1,28 @@
+export PATH="$HOME/.local/bin:$PATH"
+
+export NODE_CONFIG=mainnet
+export NODE_PORT=3007
+export NODE_HOME=${HOME}/pi-pool
+export NODE_FILES=${NODE_HOME}/files
+
+export TOPOLOGY=${NODE_FILES}/${NODE_CONFIG}-topology.json
+export CONFIG=${NODE_FILES}/${NODE_CONFIG}-config.json
+export DB_PATH=${NODE_HOME}/db
+export CARDANO_NODE_SOCKET_PATH=${NODE_HOME}/db/socket
+
+export NODE_BUILD_NUM=14528927
+
+export GIT_HOME=${HOME}/git
+export CARDANO_SPO_TOOLS=${GIT_HOME}/cardano-spo-tools
+
+cardano-service() {
+    #do things with parameters like $1 such as
+    sudo systemctl "$1" cardano-node.service
+}
+
+cardano-submit() {
+    #do things with parameters like $1 such as
+    sudo systemctl "$1" cardano-submit.service
+}
+
+source $CARDANO_SPO_TOOLS/bash/aliases.sh
