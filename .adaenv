@@ -1,7 +1,7 @@
 export PATH="$HOME/.local/bin:$PATH"
 
 export NODE_CONFIG=mainnet
-export NODE_PORT=3007
+export NODE_PORT=3000
 export NODE_HOME=${HOME}/pi-pool
 export NODE_FILES=${NODE_HOME}/files
 
