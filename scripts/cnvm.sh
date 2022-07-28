@@ -69,7 +69,7 @@ install_fn() {
     cd $HOME/tmp
 
     echo $(green "💽 Downloading the latest binaries...")
-    wget -O cardano-node-${BINARIES_VERSION_FOR_DOWNLOAD}.zip https://github.com/armada-alliance/cardano-node-binaries/blob/main/static-binaries/${BINARIES_VERSION_FOR_DOWNLOAD}.zip?raw=true >/dev/null
+    wget -O cardano-node-${BINARIES_VERSION_FOR_DOWNLOAD}.zip https://github.com/armada-alliance/cardano-node-binaries/blob/main/static-binaries/${BINARIES_VERSION_FOR_DOWNLOAD}.zip?raw=true >/dev/null 2>&1
     unzip cardano-node-${BINARIES_VERSION_FOR_DOWNLOAD}.zip
 
     echo $(green "🗄 Moving latest binaries to bin...")
@@ -106,12 +106,12 @@ update_config_fn() {
     source ${HOME}/.adaenv
 
     echo $(green "💽 Downloading the latest node files...")
-    wget -N https://hydra.iohk.io/build/${NODE_BUILD_NUM}/download/1/${NODE_CONFIG}-config.json >/dev/null
-    wget -N https://hydra.iohk.io/build/${NODE_BUILD_NUM}/download/1/${NODE_CONFIG}-byron-genesis.json >/dev/null
-    wget -N https://hydra.iohk.io/build/${NODE_BUILD_NUM}/download/1/${NODE_CONFIG}-shelley-genesis.json >/dev/null
-    wget -N https://hydra.iohk.io/build/${NODE_BUILD_NUM}/download/1/${NODE_CONFIG}-alonzo-genesis.json >/dev/null
+    wget -N https://hydra.iohk.io/build/${NODE_BUILD_NUM}/download/1/${NODE_CONFIG}-config.json >/dev/null 2>&1
+    wget -N https://hydra.iohk.io/build/${NODE_BUILD_NUM}/download/1/${NODE_CONFIG}-byron-genesis.json >/dev/null 2>&1
+    wget -N https://hydra.iohk.io/build/${NODE_BUILD_NUM}/download/1/${NODE_CONFIG}-shelley-genesis.json >/dev/null 2>&1
+    wget -N https://hydra.iohk.io/build/${NODE_BUILD_NUM}/download/1/${NODE_CONFIG}-alonzo-genesis.json >/dev/null 2>&1
     # wget -N https://hydra.iohk.io/build/${NODE_BUILD_NUM}/download/1/${NODE_CONFIG}-topology.json
-    wget -N https://raw.githubusercontent.com/input-output-hk/cardano-node/master/cardano-submit-api/config/tx-submit-mainnet-config.yaml >/dev/null
+    wget -N https://raw.githubusercontent.com/input-output-hk/cardano-node/master/cardano-submit-api/config/tx-submit-mainnet-config.yaml >/dev/null 2>&1
 
     echo $(green "🤕 Patching ${NODE_CONFIG}-config.json with P2P support...")
     sed -i ${NODE_CONFIG}-config.json \
