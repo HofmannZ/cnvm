@@ -1,3 +1,4 @@
+#!/bin/bash
 CARDANO_NODE_BINARIES_VERSION=$1
 
 if (

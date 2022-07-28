@@ -1,3 +1,4 @@
+#!/bin/bash
 echo "📋 Updating Cardano spo tools..."
 
 echo "💾 Saving current directory..."

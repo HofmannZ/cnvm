@@ -1,3 +1,4 @@
+#!/bin/bash
 ADAENV_PATH=$1
 
 if (
