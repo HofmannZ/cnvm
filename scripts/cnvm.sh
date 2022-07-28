@@ -69,7 +69,7 @@ install_fn() {
     cd $HOME/tmp
 
     echo $(green "💽 Downloading the latest binaries...")
-    wget -O cardano-node-${BINARIES_VERSION_FOR_DOWNLOAD}.zip https://github.com/armada-alliance/cardano-node-binaries/blob/main/static-binaries/${BINARIES_VERSION_FOR_DOWNLOAD}.zip?raw=true
+    wget -O cardano-node-${BINARIES_VERSION_FOR_DOWNLOAD}.zip https://github.com/armada-alliance/cardano-node-binaries/blob/main/static-binaries/${BINARIES_VERSION_FOR_DOWNLOAD}.zip?raw=true >/dev/null
     unzip cardano-node-${BINARIES_VERSION_FOR_DOWNLOAD}.zip
 
     echo $(green "🗄 Moving latest binaries to bin...")
@@ -106,12 +106,12 @@ update_config_fn() {
     source ${HOME}/.adaenv
 
     echo $(green "💽 Downloading the latest node files...")
-    wget -N https://hydra.iohk.io/build/${NODE_BUILD_NUM}/download/1/${NODE_CONFIG}-config.json
-    wget -N https://hydra.iohk.io/build/${NODE_BUILD_NUM}/download/1/${NODE_CONFIG}-byron-genesis.json
-    wget -N https://hydra.iohk.io/build/${NODE_BUILD_NUM}/download/1/${NODE_CONFIG}-shelley-genesis.json
-    wget -N https://hydra.iohk.io/build/${NODE_BUILD_NUM}/download/1/${NODE_CONFIG}-alonzo-genesis.json
+    wget -N https://hydra.iohk.io/build/${NODE_BUILD_NUM}/download/1/${NODE_CONFIG}-config.json >/dev/null
+    wget -N https://hydra.iohk.io/build/${NODE_BUILD_NUM}/download/1/${NODE_CONFIG}-byron-genesis.json >/dev/null
+    wget -N https://hydra.iohk.io/build/${NODE_BUILD_NUM}/download/1/${NODE_CONFIG}-shelley-genesis.json >/dev/null
+    wget -N https://hydra.iohk.io/build/${NODE_BUILD_NUM}/download/1/${NODE_CONFIG}-alonzo-genesis.json >/dev/null
     # wget -N https://hydra.iohk.io/build/${NODE_BUILD_NUM}/download/1/${NODE_CONFIG}-topology.json
-    wget -N https://raw.githubusercontent.com/input-output-hk/cardano-node/master/cardano-submit-api/config/tx-submit-mainnet-config.yaml
+    wget -N https://raw.githubusercontent.com/input-output-hk/cardano-node/master/cardano-submit-api/config/tx-submit-mainnet-config.yaml >/dev/null
 
     echo $(green "🤕 Patching ${NODE_CONFIG}-config.json with P2P support...")
     sed -i ${NODE_CONFIG}-config.json \
@@ -136,7 +136,7 @@ if [[ "$COMMAND_NAME" == "update-config" ]]; then
 fi
 
 if [[ "$COMMAND_NAME" == "upgrade" ]]; then
-    echo "🛑 Stopping Cardano node..."
+    echo $(green "🛑 Stopping Cardano node...")
     cardano-service stop
 
     install_fn true $2
@@ -145,10 +145,10 @@ if [[ "$COMMAND_NAME" == "upgrade" ]]; then
     echo $(green "🗑 Deleting old db...")
     rm -r $DB_PATH
 
-    echo "📦 Downloading database snapshot..."
+    echo $(green "📦 Downloading database snapshot...")
     curl -o - https://downloads.csnapshots.io/mainnet/$(curl -s https://downloads.csnapshots.io/mainnet/mainnet-db-snapshot.json | jq -r .[].file_name) | lz4 -c -d - | tar -x -C $NODE_HOME
 
-    echo "🚀 Starting Cardano node..."
+    echo $(green "🚀 Starting Cardano node...")
     cardano-service start
 
     echo $(green "✅ All done!")
