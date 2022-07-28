@@ -1,6 +1,8 @@
 # Cardano SPO tools
 
-Convenience commands for running a Cardano Node.
+Convenience aliases for running a Cardano Node.
+
+> These scripts assume you followed the Armada Alliance [environment setup](https://armada-alliance.gitbook.io/welcome/stake-pool-guides/pi-pool-tutorial/pi-node-full-guide/environment-setup).
 
 ## 🧰 How to install
 
@@ -16,22 +18,22 @@ After installing you will have some aliases available to manage your Cardano sta
 
 Convenience alias to update your Cardano node binaries.
 
-Install a version of the cardano-node. Defaults to `1.34.1`.
+Install a version of the cardano-node. Defaults to `1.34.1`:
 
 ```sh
-$ cnvm install [version]
+cnvm install [version]
 ```
 
-Downloads the latest config files. It does **not** override your topology.
+Download the latest config files. It does **not** override your topology:
 
 ```sh
-$ cnvm update-config
+cnvm update-config
 ```
 
-This is the fully automated version of the commands above. it wil stop the node, upgrade the binaries and config, download the latest snapshot, and restart the node.
+Fully automatically upgrade the binaries and config, download the latest snapshot, and restart the node:
 
 ```sh
-$ cnvm upgrade [version]
+cnvm upgrade [version]
 ```
 
 It will:
