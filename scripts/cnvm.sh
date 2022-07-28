@@ -100,7 +100,7 @@ update_config_fn() {
 
     echo $(green "🤕 Patching the build number in .adaenv...")
     sed -i ${HOME}/.adaenv \
-        -e "s/NODE_BUILD_NUM.*/NODE_BUILD_NUM=${NODE_BUILD_NUM}/g"
+        -e "s/NODE_BUILD_NUM=.*/NODE_BUILD_NUM=${NODE_BUILD_NUM}/g"
 
     echo $(green "📡 Sourcing .adaenv...")
     source ${HOME}/.adaenv
