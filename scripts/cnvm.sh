@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# --------------------
+# ------- UTILS ------
+# --------------------
+
 # colors
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -16,6 +20,10 @@ yellow() {
     printf "${YELLOW}$@${NC}\n"
 }
 
+# --------------------
+# ------- SETUP ------
+# --------------------
+
 # arguments
 COMMAND_NAME=$1
 
@@ -31,12 +39,25 @@ if [[ "$COMMAND_NAME" != "install" && "$COMMAND_NAME" != "update-config" && "$CO
     exit 1
 fi
 
+# --------------------
+# ---- FUNCTIONS -----
+# --------------------
+
 install_fn() {
     echo $(green "🧰 Installing Cardano binaries...")
 
+    # avoid additinal loggs when running as bundled command
     IS_BUNDELD_COMMAND=$1
 
     if [[ "$IS_BUNDELD_COMMAND" != "true" ]]; then
+        # function that will get executed when the user presses Ctrl+C
+        function handle_exit() {
+            echo $(green "👍 Canceled installation.")
+        }
+
+        # assign the handle_exit function to the SIGINT signal
+        trap handle_exit SIGINT
+
         echo ""
         echo $(yellow "-------------------------------------------------------")
         echo $(yellow "Make sure you stoped the cardano-node servie! Run:     ")
@@ -47,6 +68,7 @@ install_fn() {
         echo $(yellow "-------------------------------------------------------")
         echo ""
 
+        # allow the user to cancel
         sleep 10
     fi
 
@@ -87,6 +109,7 @@ install_fn() {
 update_config_fn() {
     echo $(green "🧰 Downloading the latest config files...")
 
+    # avoid additinal loggs when running as bundled command
     IS_BUNDELD_COMMAND=$1
 
     echo $(green "💾 Saving directory...")
@@ -127,6 +150,10 @@ update_config_fn() {
     fi
 }
 
+# --------------------
+# ----- COMMANDS -----
+# --------------------
+
 if [[ "$COMMAND_NAME" == "install" ]]; then
     install_fn false $2
 fi
@@ -137,6 +164,14 @@ fi
 
 if [[ "$COMMAND_NAME" == "upgrade" ]]; then
     echo $(green "🧰 Upgrading Cardano node...")
+
+    # function that will get executed when the user presses Ctrl+C
+    function handle_exit() {
+        echo $(green "👍 Canceled upgrade.")
+    }
+
+    # assign the handle_exit function to the SIGINT signal
+    trap handle_exit SIGINT
 
     echo ""
     echo $(yellow "-------------------------------------------------------")
@@ -152,6 +187,7 @@ if [[ "$COMMAND_NAME" == "upgrade" ]]; then
     echo $(yellow "-------------------------------------------------------")
     echo ""
 
+    # allow the user to cancel
     sleep 10
 
     echo $(green "🛑 Stopping Cardano node...")
