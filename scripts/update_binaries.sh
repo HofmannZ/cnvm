@@ -19,6 +19,7 @@ echo "💽 Downloading the latest binaries..."
 wget -O cardano-node-${CARDANO_NODE_BINARIES_VERSION}.zip https://github.com/armada-alliance/cardano-node-binaries/blob/main/static-binaries/${CARDANO_NODE_BINARIES_VERSION}.zip?raw=true
 unzip cardano-node-${CARDANO_NODE_BINARIES_VERSION}.zip
 
+echo "🛑 Stopping Cardano node..."
 cardano-service stop
 
 mv cardano-node/* ~/.local/bin
@@ -27,9 +28,11 @@ rm -r cardano*
 echo "🧮 Fetching the latest build number..."
 NODE_BUILD_NUM=$(curl https://hydra.iohk.io/job/Cardano/iohk-nix/cardano-deployment/latest-finished/download/1/index.html | grep -e "build" | sed 's/.*build\/\([0-9]*\)\/download.*/\1/g')
 
+echo "🩹 Patching the build number in .adaenv..."
 sed -i ${HOME}/.adaenv \
     -e "s/NODE_BUILD_NUM.*/NODE_BUILD_NUM=${NODE_BUILD_NUM}/g"
 
+echo "📡 Sourcing .adaenv..."
 source ${HOME}/.adaenv
 
 echo "📂 Downloading the latest node files..."
@@ -41,6 +44,7 @@ wget -N https://hydra.iohk.io/build/${NODE_BUILD_NUM}/download/1/${NODE_CONFIG}-
 # wget -N https://hydra.iohk.io/build/${NODE_BUILD_NUM}/download/1/${NODE_CONFIG}-topology.json
 wget -N https://raw.githubusercontent.com/input-output-hk/cardano-node/master/cardano-submit-api/config/tx-submit-mainnet-config.yaml
 
+echo "🩹 Patching ${NODE_CONFIG}-config.json with P2P support..."
 sed -i ${NODE_CONFIG}-config.json \
     -e "s/TraceBlockFetchDecisions\": false/TraceBlockFetchDecisions\": true/g" \
     -e "s/127.0.0.1/0.0.0.0/g" \
@@ -49,7 +53,7 @@ sed -i ${NODE_CONFIG}-config.json \
 echo "✅ Restoring directory..."
 cd $CURRRENT_DIR
 
-echo "🗂 Downloading database snapshot..."
+echo "📦 Downloading database snapshot..."
 curl -o - https://downloads.csnapshots.io/mainnet/$(curl -s https://downloads.csnapshots.io/mainnet/mainnet-db-snapshot.json | jq -r .[].file_name) | lz4 -c -d - | tar -x -C $NODE_HOME
 
 echo "🚀 Restarting Cardano node..."
