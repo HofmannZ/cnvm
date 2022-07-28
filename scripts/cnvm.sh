@@ -42,8 +42,8 @@ install_fn() {
         echo $(yellow "Make sure you stoped the cardano-node servie! Run:     ")
         echo $(yellow "$ cardano-service stop                                 ")
         echo ""
-        echo $(yellow "This program will automatically continue in 10 seconds.")
-        echo $(yellow "Press CTL+C to cancel the upgrade now...               ")
+        echo $(yellow "The install will automatically continue in 10 seconds. ")
+        echo $(yellow "Press CTL+C to cancel the install now...               ")
         echo $(yellow "-------------------------------------------------------")
         echo ""
 
@@ -72,7 +72,7 @@ install_fn() {
     wget -O cardano-node-${BINARIES_VERSION_FOR_DOWNLOAD}.zip https://github.com/armada-alliance/cardano-node-binaries/blob/main/static-binaries/${BINARIES_VERSION_FOR_DOWNLOAD}.zip?raw=true >/dev/null 2>&1
     unzip cardano-node-${BINARIES_VERSION_FOR_DOWNLOAD}.zip
 
-    echo $(green "🗄 Moving latest binaries to bin...")
+    echo $(green "🗄 Moving latest binaries to bin... (type y to overide)")
     mv cardano-node/* ~/.local/bin
     rm -r cardano*
 
@@ -136,6 +136,24 @@ if [[ "$COMMAND_NAME" == "update-config" ]]; then
 fi
 
 if [[ "$COMMAND_NAME" == "upgrade" ]]; then
+    echo $(green "🧰 Upgrading Cardano node...")
+
+    echo ""
+    echo $(yellow "-------------------------------------------------------")
+    echo $(yellow "You are about to upgrade your cardano-node, this       ")
+    echo $(yellow "process will stop your cardano-node for approximately  ")
+    echo $(yellow "one hour.                                              ")
+    echo ""
+    echo $(yellow "After the upgrade the cardano-node will automatically .")
+    echo $(yellow "start again.                                           ")
+    echo ""
+    echo $(yellow "The upgrade will automatically continue in 10 seconds  ")
+    echo $(yellow "Press CTL+C to cancel the upgrade now...               ")
+    echo $(yellow "-------------------------------------------------------")
+    echo ""
+
+    sleep 10
+
     echo $(green "🛑 Stopping Cardano node...")
     cardano-service stop
 
@@ -145,7 +163,7 @@ if [[ "$COMMAND_NAME" == "upgrade" ]]; then
     echo $(green "🗑 Deleting old db...")
     rm -r $DB_PATH
 
-    echo $(green "📦 Downloading database snapshot...")
+    echo $(green "📦 Downloading database snapshot... (this might take more than a hour)")
     curl -o - https://downloads.csnapshots.io/mainnet/$(curl -s https://downloads.csnapshots.io/mainnet/mainnet-db-snapshot.json | jq -r .[].file_name) | lz4 -c -d - | tar -x -C $NODE_HOME
 
     echo $(green "🚀 Starting Cardano node...")
