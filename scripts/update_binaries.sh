@@ -1,4 +1,6 @@
 #!/bin/bash
+echo "📋 Updating Cardano node binaries..."
+
 CARDANO_NODE_BINARIES_VERSION=$1
 
 if (
