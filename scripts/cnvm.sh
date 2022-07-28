@@ -144,7 +144,7 @@ if [[ "$COMMAND_NAME" == "upgrade" ]]; then
     echo $(yellow "process will stop your cardano-node for approximately  ")
     echo $(yellow "one hour.                                              ")
     echo ""
-    echo $(yellow "After the upgrade the cardano-node will automatically .")
+    echo $(yellow "After the upgrade the cardano-node will automatically  ")
     echo $(yellow "start again.                                           ")
     echo ""
     echo $(yellow "The upgrade will automatically continue in 10 seconds  ")
