@@ -1,10 +1,17 @@
 #!/bin/bash
 
-# --------------------
-# ------- UTILS ------
-# --------------------
+############################################################
+# Config                                                   #
+############################################################
 
-# colors
+SCRIPT=$(basename "$0")
+VERSION="1.0.0"
+DEFAULT_BINARIES_VERSION="1.34.1"
+
+############################################################
+# Utils                                                    #
+############################################################
+
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
@@ -20,36 +27,63 @@ yellow() {
     printf "${YELLOW}$@${NC}\n"
 }
 
-# --------------------
-# ------- SETUP ------
-# --------------------
+############################################################
+# Help                                                     #
+############################################################
+help_fn() {
+    local TEXT=(
+        "Install/upgrade binaries and config for the cardano-node and cardano-cli."
+        ""
+        "Usage: $SCRIPT [options] <command> [arguments]"
+        ""
+        "Command:"
+        "  install [version]           Installs a version of the cardano-node."
+        "  update-config               Downloads the latest config files."
+        "  upgrade [version]           Updates binaries, downloads configs files and syncs the chain."
+        ""
+        "Options:"
+        "  --help, -h                  Print this Help."
+        "  --version, -v               Print software version and exit."
+        ""
+    )
 
-# arguments
-COMMAND_NAME=$1
+    printf "%s\n" "${TEXT[@]}"
+}
 
-# config
-DEFAULT_VERSION="1.34.1"
+############################################################
+# Bad input                                                #
+############################################################
+bad_input_fn() {
+    local MESSAGE="$1"
+    local TEXT=(
+        "For an overview of the command, execute:"
+        "$SCRIPT --help"
+    )
 
-if [[ "$COMMAND_NAME" != "install" && "$COMMAND_NAME" != "update-config" && "$COMMAND_NAME" != "upgrade" ]]; then
-    echo $(red "💥 Incorrect usage of the cnvm command!")
-    echo $(yellow "📚 Usage:")
-    echo $(yellow "$  cnvm install [version]    # Installs a version of the cardano-node. (default: ")$(green "$DEFAULT_VERSION")$(yellow ").")
-    echo $(yellow "$  cnvm update-config        # Downloads the latest config files.")
-    echo $(yellow "$  cnvm upgrade [version]    # Updates binaries, downloads configs files and syncs the chain.")
-    exit 1
-fi
+    [[ $MESSAGE ]] && printf "$MESSAGE\n"
 
-# --------------------
-# ---- FUNCTIONS -----
-# --------------------
+    printf "%s\n" "${TEXT[@]}"
+}
+
+############################################################
+# Version                                                  #
+############################################################
+version_fn() {
+    local TEXT=(
+        "$SCRIPT version $VERSION"
+    )
+
+    printf "%s\n" "${TEXT[@]}"
+}
+
+############################################################
+# Install                                                  #
+############################################################
 
 install_fn() {
     echo $(green "🧰 Installing Cardano binaries...")
 
-    # avoid additinal loggs when running as bundled command
-    IS_BUNDELD_COMMAND=$1
-
-    if [[ "$IS_BUNDELD_COMMAND" != "true" ]]; then
+    if [[ "$1" != "--stand-alone" ]]; then
         echo ""
         echo $(yellow "-------------------------------------------------------")
         echo $(yellow "Make sure you stoped the cardano-node servie! Run:     ")
@@ -64,20 +98,20 @@ install_fn() {
         sleep 10
     fi
 
-    BINARIES_VERSION=$2
+    local BINARIES_VERSION=$2
 
     if (
         [ -z "$2" ]
     ); then
-        echo $(yellow "📋 No version provided, using default (${DEFAULT_VERSION})")
-        BINARIES_VERSION=$DEFAULT_VERSION
+        echo $(yellow "📋 No version provided, using default (${DEFAULT_BINARIES_VERSION})")
+        local BINARIES_VERSION=$DEFAULT_BINARIES_VERSION
     fi
 
     # replace the dots with underscores
-    BINARIES_VERSION_FOR_DOWNLOAD=$(echo "${BINARIES_VERSION//\./_}")
+    local BINARIES_VERSION_FOR_DOWNLOAD=$(echo "${BINARIES_VERSION//\./_}")
 
     echo $(green "💾 Saving directory...")
-    CURRRENT_DIR=$(pwd)
+    local CURRRENT_DIR=$(pwd)
 
     echo $(green "📂 Moving to temporary directory...")
     cd $HOME/tmp
@@ -93,26 +127,26 @@ install_fn() {
     echo $(green "✅ Restoring directory...")
     cd $CURRRENT_DIR
 
-    if [[ "$IS_BUNDELD_COMMAND" != "true" ]]; then
+    if [[ "$1" != "--stand-alone" ]]; then
         echo $(green "✅ All done!")
-        exit 0
     fi
 }
+
+############################################################
+# Update config                                            #
+############################################################
 
 update_config_fn() {
     echo $(green "🧰 Downloading the latest config files...")
 
-    # avoid additinal loggs when running as bundled command
-    IS_BUNDELD_COMMAND=$1
-
     echo $(green "💾 Saving directory...")
-    CURRRENT_DIR=$(pwd)
+    local CURRRENT_DIR=$(pwd)
 
     echo $(green "📂 Moving to node files directory...")
     cd $NODE_FILES
 
     echo $(green "🔦 Fetching the latest build number...")
-    NODE_BUILD_NUM=$(curl https://hydra.iohk.io/job/Cardano/iohk-nix/cardano-deployment/latest-finished/download/1/index.html | grep -e "build" | sed 's/.*build\/\([0-9]*\)\/download.*/\1/g')
+    local NODE_BUILD_NUM=$(curl https://hydra.iohk.io/job/Cardano/iohk-nix/cardano-deployment/latest-finished/download/1/index.html | grep -e "build" | sed 's/.*build\/\([0-9]*\)\/download.*/\1/g')
 
     echo $(green "🤕 Patching the build number in .adaenv...")
     sed -i ${HOME}/.adaenv \
@@ -138,25 +172,16 @@ update_config_fn() {
     echo $(green "✅ Restoring directory...")
     cd $CURRRENT_DIR
 
-    if [[ "$IS_BUNDELD_COMMAND" != "true" ]]; then
+    if [[ "$1" != "--stand-alone" ]]; then
         echo $(green "✅ All done!")
-        exit 0
     fi
 }
 
-# --------------------
-# ----- COMMANDS -----
-# --------------------
+############################################################
+# Upgrade                                                  #
+############################################################
 
-if [[ "$COMMAND_NAME" == "install" ]]; then
-    install_fn false $2
-fi
-
-if [[ "$COMMAND_NAME" == "update-config" ]]; then
-    update_config_fn false
-fi
-
-if [[ "$COMMAND_NAME" == "upgrade" ]]; then
+upgrade_fn() {
     echo $(green "🧰 Upgrading Cardano node...")
 
     echo ""
@@ -179,8 +204,8 @@ if [[ "$COMMAND_NAME" == "upgrade" ]]; then
     echo $(green "🛑 Stopping Cardano node...")
     cardano-service stop
 
-    install_fn true $2
-    update_config_fn true
+    install_fn --no-stand-alone $1
+    update_config_fn --no-stand-alone
 
     echo $(green "🗑 Deleting old db...")
     rm -r $DB_PATH
@@ -192,5 +217,52 @@ if [[ "$COMMAND_NAME" == "upgrade" ]]; then
     cardano-service start
 
     echo $(green "✅ All done!")
-    exit 0
-fi
+}
+
+############################################################
+############################################################
+# Main program                                             #
+############################################################
+############################################################
+
+############################################################
+# Process the input options. Add options as needed.        #
+############################################################
+# Get the options
+while (($#)); do
+    case "$1" in
+
+    --help | -h)
+        help_fn
+        exit 0
+        ;;
+
+    --version | -v)
+        version_fn
+        exit 0
+        ;;
+
+    install)
+        shift
+        version_fn --stand-alone $*
+        exit 0
+        ;;
+
+    update-config)
+        shift
+        update_config_fn --stand-alone $*
+        exit 0
+        ;;
+
+    upgrade)
+        shift
+        upgrade_fn $*
+        exit 0
+        ;;
+
+    *)
+        bad_input_fn "Option/command not recognized."
+        exit 1
+        ;;
+    esac
+done
