@@ -34,7 +34,7 @@ cardano-monitor() {
 export PATH="$HOME/stakepoolscripts/bin:$PATH"
 export MAGIC=764824073
 export BYRON_SHELLEY_EPOCHS=208
-export CONFIG_NET=${NODE_CONFIG}
+export CONFIG_NET=$NODE_CONFIG
 
 # config for https://github.com/HofmannZ/cardano-spo-tools
 export GIT_HOME=${HOME}/git
