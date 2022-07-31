@@ -142,13 +142,16 @@ usage() {
 #######################################
 print_cardano_node_service_warning() {
   echo_yellow ""
-  echo_yellow "--------------------------------------------------------------------------"
-  echo_yellow "⛔️ Make sure you stoped the cardano-node service! Run:"
+  echo_yellow "--------------------------------------------------------------------------------"
+  echo_yellow "Make sure you stoped the cardano-node service! Run:"
   echo_yellow "$ cardano-service stop"
+  echo_yellow ""
+  echo_yellow "Or run this command with the '--restart' flag to automatically restart the "
+  echo_yellow "cardano-node service."
   echo_yellow ""
   echo_yellow "The process will automatically continue in 10 seconds."
   echo_yellow "Press CTL+C to cancel the process now..."
-  echo_yellow "--------------------------------------------------------------------------"
+  echo_yellow "--------------------------------------------------------------------------------"
   echo_yellow ""
 
   # Allow some time for the user to cancel.
@@ -164,13 +167,14 @@ print_cardano_node_service_warning() {
 #######################################
 stop_cardano_node_service() {
   echo_yellow ""
-  echo_yellow "--------------------------------------------------------------------------"
-  echo_yellow "⛔️ You are about to temporarily stop the cardano-node to $1."
+  echo_yellow "--------------------------------------------------------------------------------"
+  echo_yellow "You are about to temporarily stop the cardano-node to "
+  echo_yellow "$1."
   echo_yellow "After this is done, the cardano-node will automatically start agian."
   echo_yellow ""
   echo_yellow "The process will automatically continue in 10 seconds."
   echo_yellow "Press CTL+C to cancel the process now..."
-  echo_yellow "--------------------------------------------------------------------------"
+  echo_yellow "--------------------------------------------------------------------------------"
   echo_yellow ""
 
   # Allow some time for the user to cancel.
@@ -303,7 +307,7 @@ download_db_snapshot() {
   echo_green "🧰 Downloading the latest database snapshot..."
 
   # echo_yellow ""
-  # echo_yellow "--------------------------------------------------------------------------"
+  # echo_yellow "--------------------------------------------------------------------------------"
   # echo_yellow "⛔️ You are about to download the latest database snapshot, this process "
   # echo_yellow "will take approximately one hour."
   # echo_yellow ""
@@ -312,7 +316,7 @@ download_db_snapshot() {
   # echo_yellow ""
   # echo_yellow "The process will automatically continue in 10 seconds."
   # echo_yellow "Press CTL+C to cancel the process now..."
-  # echo_yellow "--------------------------------------------------------------------------"
+  # echo_yellow "--------------------------------------------------------------------------------"
   # echo_yellow ""
 
   echo_green "🗑 Deleting old db..."
@@ -424,8 +428,6 @@ main() {
     done
     shift # $EOL
   fi
-
-  echo "Remaining args: $*"
 
   case "$1" in
   install-binaries)
