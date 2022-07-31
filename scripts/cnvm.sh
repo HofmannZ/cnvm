@@ -372,7 +372,7 @@ main() {
       # Options processing.
       -h | --help)
         echo_green "🧰 Convenience commands to update and cofigure the cardano-node, cardano-cli, "
-        echo_green "and cardano-submit-api binaries."
+        echo_green "   and cardano-submit-api binaries."
         usage
         exit 0
         ;;
@@ -382,15 +382,12 @@ main() {
         ;;
       --p2p)
         peer_to_peer="Enabled"
-        shift
         ;;
       --snapshot)
         download_snapshot="Yes"
-        shift
         ;;
       --restart)
         restart_cardano_node="Yes"
-        shift
         ;;
       # -n | --name)
       #   assert_argument "$1" "${opt}"
