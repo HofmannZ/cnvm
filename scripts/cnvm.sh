@@ -128,8 +128,11 @@ usage() {
   echo_green "  upgrade-self                 Upgrades to the latest version of this script."
   echo_green ""
   echo_green "Options:"
-  echo_green "  -h                           Prints this usage help."
-  echo_green "  -v                           Prints the software version."
+  echo_green "  -h | --help                  Prints this usage help."
+  echo_green "  -v | --version               Prints the software version."
+  echo_green "  --p2p                        Patches cofiguration for P2P topology."
+  echo_green "  --snapshot                   Additionally downloads the db snapshot."
+  echo_green "  --restart                    Stops and starts the cardano-node service."
   echo_green ""
 }
 
