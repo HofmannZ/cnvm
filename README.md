@@ -18,7 +18,7 @@ After installing you can use the following commands to manage your Cardano stake
 
 Convenience alias to update your Cardano node binaries.
 
-#### cnvm install-binaries
+#### $ cnvm install-binaries
 
 Installs the cardano-node, cardano-cli, and cardano-submit-api binaries. Version defaults to `1.34.1`, use:
 
@@ -38,7 +38,7 @@ or with restart:
 cnvm install --restart
 ```
 
-#### cnvm download-config-files
+#### $ cnvm download-config-files
 
 Downloads and patches the latest cardano config files. Defaults to normal topology, use:
 
@@ -54,7 +54,7 @@ cnvm download-config-files --p2p
 
 > It does **not** override your topology.
 
-#### cnvm download-snapshot
+#### $ cnvm download-snapshot
 
 Downloads the latest database snapshot from csnapshots.io. Use:
 
@@ -70,7 +70,7 @@ cnvm download-snapshot --restart
 
 > Make use you have stopped you cardano-node! (The script will remind you when you run it.)
 
-#### cnvm upgrade
+#### $ cnvm upgrade
 
 Upgrades binaries and downloads the latest cardano config files. Optionally downloads the latest snapshot and patches for P2P. Version defaults to `1.34.1`, use:
 
@@ -112,7 +112,7 @@ The underlying algorithm:
 6. Download the latest database snapshot from [csnapshots.io](https://csnapshots.io). (Optional via `--snapshot` flag).
 7. Start the cardano-node (Optional via `--restart` flag).
 
-#### cnvm upgrade-self
+#### $ cnvm upgrade-self
 
 Upgrades to the latest version of this script. Use:
 
