@@ -66,21 +66,21 @@ currrent_dir=$(pwd)
 
 echo_green "📂 Cloning repository..."
 cd "${HOME}/git" || exit 1
-git clone https://github.com/HofmannZ/cardano-spo-tools.git
+git clone https://github.com/HofmannZ/cnvm.git
 
 echo_green "📋 Appending config to .adaenv..."
 echo "
-# config for https://github.com/HofmannZ/cardano-spo-tools
+# config for https://github.com/HofmannZ/cnvm
 export GIT_HOME=\"\${HOME}/git\"
-export CARDANO_SPO_TOOLS=\"\${GIT_HOME}/cardano-spo-tools\"
+export CNVM_HOME=\"\${GIT_HOME}/cnvm\"
 
 cnvm() {
-  \"\${CARDANO_SPO_TOOLS}/scripts/cnvm.sh\" \"\$@\"
+  \"\${CNVM_HOME}/scripts/cnvm.sh\" \"\$@\"
 }
 
 export -f cnvm
 
-source \"\${CARDANO_SPO_TOOLS}/bash/aliases.sh\"
+source \"\${CNVM_HOME}/bash/aliases.sh\"
 " >>"${HOME}/.adaenv"
 
 echo_green "📡 Sourcing .adaenv..."

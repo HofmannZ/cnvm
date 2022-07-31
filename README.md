@@ -7,7 +7,7 @@ Convenience aliases for running a Cardano Node.
 ## 🧰 How to install
 
 ```sh
-bash <(curl -Ls https://github.com/HofmannZ/cardano-spo-tools/raw/master/scripts/install.sh)
+bash <(curl -Ls https://github.com/HofmannZ/cnvm/raw/master/scripts/install.sh)
 ```
 
 ## 📚 How to use

@@ -332,7 +332,7 @@ download_db_snapshot() {
 #######################################
 # Upgrades to the latest version of this script.
 # Globals:
-#   CARDANO_SPO_TOOLS
+#   CNVM_HOME
 # Arguments:
 #   None
 #######################################
@@ -345,7 +345,7 @@ upgrade_self() {
   currrent_dir=$(pwd)
 
   echo_green "📂 Pulling latest changes..."
-  cd "${CARDANO_SPO_TOOLS}" || exit 1
+  cd "${CNVM_HOME}" || exit 1
   git pull
 
   echo_green "✅ Restoring directory..."
