@@ -78,6 +78,8 @@ cnvm() {
   \"\${CARDANO_SPO_TOOLS}/scripts/cnvm.sh\" \"\$@\"
 }
 
+export -f cnvm
+
 source \"\${CARDANO_SPO_TOOLS}/bash/aliases.sh\"
 " >>"${HOME}/.adaenv"
 
