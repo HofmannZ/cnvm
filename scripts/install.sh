@@ -92,8 +92,7 @@ cd "${HOME}/git" || exit 1
 git clone https://github.com/HofmannZ/cardano-spo-tools.git
 
 echo_green "📋 Appending config to .adaenv..."
-cat <<EOF >>~/.adaenv
-# config for https://github.com/HofmannZ/cardano-spo-tools
+echo '# config for https://github.com/HofmannZ/cardano-spo-tools
 export GIT_HOME=${HOME}/git
 export CARDANO_SPO_TOOLS=${GIT_HOME}/cardano-spo-tools
 
@@ -101,8 +100,7 @@ cnvm() {
   "${CARDANO_SPO_TOOLS}/scripts/cnvm.sh" "$@"
 }
 
-source "${CARDANO_SPO_TOOLS}/bash/aliases.sh"
-EOF
+source "${CARDANO_SPO_TOOLS}/bash/aliases.sh"' >>~/.adaenv
 
 echo_green "📡 Sourcing .adaenv..."
 source "${HOME}/.adaenv"
