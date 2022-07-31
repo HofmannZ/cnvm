@@ -25,7 +25,7 @@ NC='\033[0m'
 #   Message to log.
 #######################################
 echo_red() {
-    echo "${RED}$*${NC}"
+    echo -e "${RED}$*${NC}"
 }
 
 #######################################
@@ -37,7 +37,7 @@ echo_red() {
 #   Message to log.
 #######################################
 echo_green() {
-    echo "${GREEN}$*${NC}"
+    echo -e "${GREEN}$*${NC}"
 }
 
 #######################################
@@ -49,30 +49,7 @@ echo_green() {
 #   Message to log.
 #######################################
 echo_yellow() {
-    echo "${YELLOW}$*${NC}"
-}
-
-#######################################
-# Loggs an error messages to STDERR.
-# Globals:
-#   None
-# Arguments:
-#   Error message to log.
-#######################################
-err() {
-    echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: ${RED}$*${NC}" >&2
-}
-
-#######################################
-# Asserts if the argument has got a value.
-# Globals:
-#   EOL
-# Arguments:
-#   Argument name.
-#   Maybe argument value.
-#######################################
-assert_argument() {
-    test "$1" != "$EOL" || err "💥 $2 requires an argument."
+    echo -e "${YELLOW}$*${NC}"
 }
 
 #######################################
@@ -92,16 +69,17 @@ cd "${HOME}/git" || exit 1
 git clone https://github.com/HofmannZ/cardano-spo-tools.git
 
 echo_green "📋 Appending config to .adaenv..."
-echo '
+echo "
 # config for https://github.com/HofmannZ/cardano-spo-tools
-export GIT_HOME=${HOME}/git
-export CARDANO_SPO_TOOLS=${GIT_HOME}/cardano-spo-tools
+export GIT_HOME=\"\${HOME}/git\"
+export CARDANO_SPO_TOOLS=\"\${GIT_HOME}/cardano-spo-tools\"
 
 cnvm() {
-  "${CARDANO_SPO_TOOLS}/scripts/cnvm.sh" "$@"
+  \"\${CARDANO_SPO_TOOLS}/scripts/cnvm.sh\" \"\$@\"
 }
 
-source "${CARDANO_SPO_TOOLS}/bash/aliases.sh"' >>"${HOME}/.adaenv"
+source \"\${CARDANO_SPO_TOOLS}/bash/aliases.sh\"
+" >>"${HOME}/.adaenv"
 
 echo_green "📡 Sourcing .adaenv..."
 source "${HOME}/.adaenv"
