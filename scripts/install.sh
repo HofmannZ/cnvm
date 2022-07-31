@@ -101,7 +101,7 @@ cnvm() {
   "${CARDANO_SPO_TOOLS}/scripts/cnvm.sh" "$@"
 }
 
-source "${CARDANO_SPO_TOOLS}/bash/aliases.sh"' >>~/.adaenv
+source "${CARDANO_SPO_TOOLS}/bash/aliases.sh"' >>"${HOME}/.adaenv"
 
 echo_green "📡 Sourcing .adaenv..."
 source "${HOME}/.adaenv"
