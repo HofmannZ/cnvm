@@ -15,7 +15,7 @@
 #######################################
 
 # Constants
-SCRIPT=$(basename "$0")
+SCRIPT="cnvm"
 SCRIPT_VERSION="1.0.0"
 REQUIRED_DEPENDENCIES=(curl grep jq lz4 sed tar unzip wget)
 DEFAULT_BINARIES_VERSION="1.34.1"
@@ -105,7 +105,7 @@ assert_argument() {
 #   None
 #######################################
 version() {
-  echo_green "📦 ${SCRIPT} version v${SCRIPT_VERSION}."
+  echo_green "📦 ${SCRIPT} version ${SCRIPT_VERSION}"
 }
 
 #######################################
@@ -116,24 +116,20 @@ version() {
 #   None
 #######################################
 usage() {
-  local text=(
-    ""
-    "📚 Usage: $SCRIPT [options] <command> [arguments]"
-    ""
-    "Command:"
-    "  install-binaries [version]   Installs the cardano-node, cardano-cli, and cardano-submit-api binaries."
-    "  download-config-files        Downloads and patches the latest cardano config files."
-    "  download-snapshot            Downloads the latest database snapshot from csnapshots.io."
-    "  upgrade [version]            Upgrades binaries and downloads the latest cardano config files."
-    "  upgrade-self                 Upgrades to the latest version of this script."
-    ""
-    "Options:"
-    "  -h                           Prints this usage help."
-    "  -v                           Prints the software version."
-    ""
-  )
-
-  echo_green "${text[@]}"
+  echo_green ""
+  echo_green "📚 Usage: $SCRIPT [options] <command> [arguments]"
+  echo_green ""
+  echo_green "Command:"
+  echo_green "  install-binaries [version]   Installs the cardano-node, cardano-cli, and cardano-submit-api binaries."
+  echo_green "  download-config-files        Downloads and patches the latest cardano config files."
+  echo_green "  download-snapshot            Downloads the latest database snapshot from csnapshots.io."
+  echo_green "  upgrade [version]            Upgrades binaries and downloads the latest cardano config files."
+  echo_green "  upgrade-self                 Upgrades to the latest version of this script."
+  echo_green ""
+  echo_green "Options:"
+  echo_green "  -h                           Prints this usage help."
+  echo_green "  -v                           Prints the software version."
+  echo_green ""
 }
 
 #######################################
@@ -144,19 +140,15 @@ usage() {
 #   None
 #######################################
 print_cardano_node_service_warning() {
-  local text=(
-    ""
-    "--------------------------------------------------------------------------"
-    "⛔️ Make sure you stoped the cardano-node service! Run:"
-    "$ cardano-service stop"
-    ""
-    "The process will automatically continue in 10 seconds."
-    "Press CTL+C to cancel the process now..."
-    "--------------------------------------------------------------------------"
-    ""
-  )
-
-  echo_yellow "${text[@]}"
+  echo_yellow ""
+  echo_yellow "--------------------------------------------------------------------------"
+  echo_yellow "⛔️ Make sure you stoped the cardano-node service! Run:"
+  echo_yellow "$ cardano-service stop"
+  echo_yellow ""
+  echo_yellow "The process will automatically continue in 10 seconds."
+  echo_yellow "Press CTL+C to cancel the process now..."
+  echo_yellow "--------------------------------------------------------------------------"
+  echo_yellow ""
 
   # Allow some time for the user to cancel.
   sleep 10
@@ -170,19 +162,15 @@ print_cardano_node_service_warning() {
 #   None
 #######################################
 stop_cardano_node_service() {
-  local text=(
-    ""
-    "--------------------------------------------------------------------------"
-    "⛔️ You are about to temporarily stop the cardano-node to $1."
-    "After this is done, the cardano-node will automatically start agian."
-    ""
-    "The process will automatically continue in 10 seconds."
-    "Press CTL+C to cancel the process now..."
-    "--------------------------------------------------------------------------"
-    ""
-  )
-
-  echo_yellow "${text[@]}"
+  echo_yellow ""
+  echo_yellow "--------------------------------------------------------------------------"
+  echo_yellow "⛔️ You are about to temporarily stop the cardano-node to $1."
+  echo_yellow "After this is done, the cardano-node will automatically start agian."
+  echo_yellow ""
+  echo_yellow "The process will automatically continue in 10 seconds."
+  echo_yellow "Press CTL+C to cancel the process now..."
+  echo_yellow "--------------------------------------------------------------------------"
+  echo_yellow ""
 
   # Allow some time for the user to cancel.
   sleep 10
@@ -313,22 +301,18 @@ download_config_files() {
 download_db_snapshot() {
   echo_green "🧰 Downloading the latest database snapshot..."
 
-  # local text=(
-  #   ""
-  #   "--------------------------------------------------------------------------"
-  #   "⛔️ You are about to download the latest database snapshot, this process "
-  #   "will take approximately one hour."
-  #   ""
-  #   "Make sure you stoped the cardano-node service! Run:"
-  #   "$ cardano-service stop"
-  #   ""
-  #   "The process will automatically continue in 10 seconds."
-  #   "Press CTL+C to cancel the process now..."
-  #   "--------------------------------------------------------------------------"
-  #   ""
-  # )
-
-  # echo_yellow "${text[@]}"
+  # echo_yellow ""
+  # echo_yellow "--------------------------------------------------------------------------"
+  # echo_yellow "⛔️ You are about to download the latest database snapshot, this process "
+  # echo_yellow "will take approximately one hour."
+  # echo_yellow ""
+  # echo_yellow "Make sure you stoped the cardano-node service! Run:"
+  # echo_yellow "$ cardano-service stop"
+  # echo_yellow ""
+  # echo_yellow "The process will automatically continue in 10 seconds."
+  # echo_yellow "Press CTL+C to cancel the process now..."
+  # echo_yellow "--------------------------------------------------------------------------"
+  # echo_yellow ""
 
   echo_green "🗑 Deleting old db..."
   rm -r "${DB_PATH}"
