@@ -1,4 +1,4 @@
-# Cardano SPO tools
+# Cardano node version manager
 
 Convenience aliases for running a Cardano Node.
 
