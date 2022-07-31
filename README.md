@@ -12,47 +12,113 @@ bash <(curl -Ls https://github.com/HofmannZ/cardano-spo-tools/raw/master/scripts
 
 ## 📚 How to use
 
-After installing you will have some aliases available to manage your Cardano stake pool.
+After installing you can use the following commands to manage your Cardano stake pool.
 
 ### cnvm
 
 Convenience alias to update your Cardano node binaries.
 
-Install a version of the cardano-node. Defaults to `1.34.1`:
+#### cnvm install-binaries
+
+Installs the cardano-node, cardano-cli, and cardano-submit-api binaries. Version defaults to `1.34.1`, use:
 
 ```sh
-cnvm install [version]
+cnvm install
 ```
 
-Download the latest config files. It does **not** override your topology:
+or for a specific version:
 
 ```sh
-cnvm update-config
+cnvm install 1.35.2
 ```
 
-Fully automatically upgrade the binaries and config, download the latest snapshot, and restart the node:
+or with restart:
 
 ```sh
-cnvm upgrade [version]
+cnvm install --restart
 ```
 
-It will:
+#### cnvm download-config-files
 
-1. Stop the cardano-node.
+Downloads and patches the latest cardano config files. Defaults to normal topology, use:
+
+```sh
+cnvm download-config-files
+```
+
+or for P2P:
+
+```sh
+cnvm download-config-files --p2p
+```
+
+> It does **not** override your topology.
+
+#### cnvm download-snapshot
+
+Downloads the latest database snapshot from csnapshots.io. Use:
+
+```sh
+cnvm download-snapshot
+```
+
+or with restart:
+
+```sh
+cnvm download-snapshot --restart
+```
+
+> Make use you have stopped you cardano-node! (The script will remind you when you run it.)
+
+#### cnvm upgrade
+
+Upgrades binaries and downloads the latest cardano config files. Optionally downloads the latest snapshot and patches for P2P. Version defaults to `1.34.1`, use:
+
+```sh
+cnvm upgrade
+```
+
+or for a specific version:
+
+```sh
+cnvm upgrade 1.35.2
+```
+
+or with snapshot:
+
+```sh
+cnvm upgrade --snapshot
+```
+
+or with p2p:
+
+```sh
+cnvm upgrade --p2p
+```
+
+or with restart:
+
+```sh
+cnvm upgrade --restart
+```
+
+The underlying algorithm:
+
+1. Stop the cardano-node (Optional via `--restart` flag).
 2. Download the latest binaries (defaults to `1.34.1`).
 3. Fetch the latest build number and save it to your `.adaenv`.
 4. Download the latest node files (with the exception of the topology file).
-5. Patches the configuration for P2P.
-6. Download the latest database snapshot from [csnapshots.io](https://csnapshots.io).
-7. Start the cardano-node.
+5. Patches the configuration for P2P. (Optional via `--p2p` flag).
+6. Download the latest database snapshot from [csnapshots.io](https://csnapshots.io). (Optional via `--snapshot` flag).
+7. Start the cardano-node (Optional via `--restart` flag).
 
-### spoup
+#### cnvm upgrade-self
 
-Convenience alias to update these scripts, it will:
+Upgrades to the latest version of this script. Use:
 
-1. Pull the latest changes from GitHub.
-2. Copy the `.adaenv` file to the node home.
-3. Source the `.adaenv` file to enable the changes.
+```sh
+cnvm upgrade-self
+```
 
 ### sysup
 
