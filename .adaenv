@@ -14,20 +14,20 @@ export CARDANO_NODE_SOCKET_PATH=${NODE_HOME}/db/socket
 export NODE_BUILD_NUM=14528927
 
 cardano-service() {
-    #do things with parameters like $1 such as
-    sudo systemctl "$1" cardano-node.service
+  #do things with parameters like $1 such as
+  sudo systemctl "$1" cardano-node.service
 }
 
 cardano-submit() {
-    #do things with parameters like $1 such as
-    sudo systemctl "$1" cardano-submit.service
+  #do things with parameters like $1 such as
+  sudo systemctl "$1" cardano-submit.service
 }
 
 cardano-monitor() {
-    #do things with parameters like $1 such as
-    # sudo systemctl "$1" prometheus.service
-    sudo systemctl "$1" prometheus-node-exporter.service
-    # sudo systemctl "$1" grafana-server.service
+  #do things with parameters like $1 such as
+  # sudo systemctl "$1" prometheus.service
+  sudo systemctl "$1" prometheus-node-exporter.service
+  # sudo systemctl "$1" grafana-server.service
 }
 
 # config for https://github.com/gitmachtl/scripts
@@ -40,4 +40,8 @@ export CONFIG_NET=$NODE_CONFIG
 export GIT_HOME=${HOME}/git
 export CARDANO_SPO_TOOLS=${GIT_HOME}/cardano-spo-tools
 
-source $CARDANO_SPO_TOOLS/bash/aliases.sh
+cnvm() {
+  "${CARDANO_SPO_TOOLS}/scripts/cnvm.sh" "$@"
+}
+
+source "${CARDANO_SPO_TOOLS}/bash/aliases.sh"
