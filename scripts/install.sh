@@ -92,7 +92,8 @@ cd "${HOME}/git" || exit 1
 git clone https://github.com/HofmannZ/cardano-spo-tools.git
 
 echo_green "📋 Appending config to .adaenv..."
-echo '# config for https://github.com/HofmannZ/cardano-spo-tools
+echo '
+# config for https://github.com/HofmannZ/cardano-spo-tools
 export GIT_HOME=${HOME}/git
 export CARDANO_SPO_TOOLS=${GIT_HOME}/cardano-spo-tools
 
