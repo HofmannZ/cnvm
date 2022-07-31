@@ -1,6 +1,6 @@
 # Cardano node version manager
 
-Convenience aliases for running a Cardano Node.
+Convenience commands for running a Cardano Node.
 
 > These scripts assume you followed the Armada Alliance [environment setup](https://armada-alliance.gitbook.io/welcome/stake-pool-guides/pi-pool-tutorial/pi-node-full-guide/environment-setup).
 
