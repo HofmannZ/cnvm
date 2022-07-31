@@ -74,7 +74,7 @@ echo_yellow() {
 #   Error message to log.
 #######################################
 err() {
-  echo -e "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: ${RED}$*${NC}" >&2
+  echo -e "${RED}[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $*${NC}" >&2
 }
 
 #######################################
@@ -212,7 +212,7 @@ install_binaries() {
   echo_green "🧰 Installing Cardano binaries..."
 
   if [[ -z "$1" ]]; then
-    echo_yellow "📋 No version provided, using default (${DEFAULT_BINARIES_VERSION}.)"
+    echo_yellow "📋 No version provided, using default version ${DEFAULT_BINARIES_VERSION}."
     binaries_version=$DEFAULT_BINARIES_VERSION
   fi
 
