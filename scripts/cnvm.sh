@@ -2,6 +2,13 @@
 #
 # Provide convenience commands to update and cofigure the cardano-node,
 # cardano-cli, and cardano-submit-api binaries.
+#
+# Copyright 2022 Zino Hofmann
+#
+
+#
+# Styleguide: https://google.github.io/styleguide/shellguide.html
+#
 
 #######################################
 # --- GLOBALS ---
@@ -115,10 +122,10 @@ usage() {
     ""
     "Command:"
     "  install-binaries [version]   Installs the cardano-node, cardano-cli, and cardano-submit-api binaries."
-    "  upgrade [version]            Upgrades binaries and downloads the latest cardano config files."
-    "  upgrade-self                 Upgrades to the latest version of this script."
     "  download-config-files        Downloads and patches the latest cardano config files."
     "  download-snapshot            Downloads the latest database snapshot from csnapshots.io."
+    "  upgrade [version]            Upgrades binaries and downloads the latest cardano config files."
+    "  upgrade-self                 Upgrades to the latest version of this script."
     ""
     "Options:"
     "  -h                           Prints this usage help."
@@ -129,6 +136,13 @@ usage() {
   echo_green "${text[@]}"
 }
 
+#######################################
+# Prints a warning that the cardano node service should be stoped.
+# Globals:
+#   None
+# Arguments:
+#   None
+#######################################
 print_cardano_node_service_warning() {
   local text=(
     ""
@@ -149,8 +163,50 @@ print_cardano_node_service_warning() {
 }
 
 #######################################
+# Stops the cardano node service
+# Globals:
+#   None
+# Arguments:
+#   None
+#######################################
+stop_cardano_node_service() {
+  local text=(
+    ""
+    "--------------------------------------------------------------------------"
+    "⛔️ You are about to temporarily stop the cardano-node to $1."
+    "After this is done, the cardano-node will automatically start agian."
+    ""
+    "The process will automatically continue in 10 seconds."
+    "Press CTL+C to cancel the process now..."
+    "--------------------------------------------------------------------------"
+    ""
+  )
+
+  echo_yellow "${text[@]}"
+
+  # Allow some time for the user to cancel.
+  sleep 10
+
+  echo_green "🛑 Stopping cardano-node..."
+  cardano-service stop
+}
+
+#######################################
+# Starts the cardano node service
+# Globals:
+#   None
+# Arguments:
+#   None
+#######################################
+start_cardano_node_service() {
+  echo_green "🚀 Starting Cardano node..."
+  cardano-service start
+}
+
+#######################################
 # Downloads and installs the cardano-node, cardano-cli, and cardano-submit-api binaries.
 # Globals:
+#   HOME
 #   DEFAULT_BINARIES_VERSION
 # Arguments:
 #   Binaries version.
@@ -181,7 +237,7 @@ install_binaries() {
   unzip "cardano-node-${binaries_version_for_download}.zip"
 
   echo_green "🗄 Moving latest binaries to bin... (type y to overide)"
-  mv cardano-node/* ~/.local/bin
+  mv cardano-node/* "${HOME}/.local/bin"
   rm -r cardano*
 
   echo_green "✅ Restoring directory..."
@@ -315,6 +371,7 @@ main() {
 
   local peer_to_peer="Disabled"
   local download_snapshot="No"
+  local restart_cardano_node="No"
 
   # Proccess arguments and options.
   # (See: https://stackoverflow.com/a/62616466/6121420)
@@ -342,6 +399,10 @@ main() {
         ;;
       --snapshot)
         download_snapshot="Yes"
+        shift
+        ;;
+      --restart)
+        restart_cardano_node="Yes"
         shift
         ;;
       # -n | --name)
@@ -378,29 +439,57 @@ main() {
     shift # $EOL
   fi
 
-  # TODO(HofmannZ): implement functions
   case "$1" in
   install-binaries)
     local binaries_version="$2"
 
-    print_cardano_node_service_warning
+    if [[ $restart_cardano_node == "Yes" ]]; then
+      stop_cardano_node_service "download the cardano-node binaries"
+    else
+      print_cardano_node_service_warning
+    fi
+
     install_binaries "$binaries_version"
+
+    if [[ $restart_cardano_node == "Yes" ]]; then
+      start_cardano_node_service
+    fi
     ;;
   download-config-files)
     download_config_files "$peer_to_peer"
     ;;
   download-snapshot)
+
+    if [[ $restart_cardano_node == "Yes" ]]; then
+      stop_cardano_node_service "download the database snapshot"
+    else
+      print_cardano_node_service_warning
+    fi
+
     download_db_snapshot
+
+    if [[ $restart_cardano_node == "Yes" ]]; then
+      start_cardano_node_service
+    fi
     ;;
   upgrade)
     local binaries_version="$2"
 
-    print_cardano_node_service_warning
+    if [[ $restart_cardano_node == "Yes" ]]; then
+      stop_cardano_node_service "upgrade the cardano-node"
+    else
+      print_cardano_node_service_warning
+    fi
+
     install_binaries "$binaries_version"
     download_config_files "$peer_to_peer"
 
     if [[ $download_snapshot == "Yes" ]]; then
       download_db_snapshot
+    fi
+
+    if [[ $restart_cardano_node == "Yes" ]]; then
+      start_cardano_node_service
     fi
     ;;
   upgrade-self)
