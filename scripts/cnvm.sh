@@ -20,9 +20,6 @@ SCRIPT_VERSION="1.0.0"
 REQUIRED_DEPENDENCIES=(curl grep jq lz4 sed tar unzip wget)
 DEFAULT_BINARIES_VERSION="1.34.1"
 
-# Utils
-EOL=$(printf '\1\3\3\7')
-
 # Colors
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -120,10 +117,14 @@ usage() {
   echo_green "📚 Usage: $SCRIPT [options] <command> [arguments]"
   echo_green ""
   echo_green "Command:"
-  echo_green "  install-binaries [version]   Installs the cardano-node, cardano-cli, and cardano-submit-api binaries."
-  echo_green "  download-config-files        Downloads and patches the latest cardano config files."
-  echo_green "  download-snapshot            Downloads the latest database snapshot from csnapshots.io."
-  echo_green "  upgrade [version]            Upgrades binaries and downloads the latest cardano config files."
+  echo_green "  install-binaries [version]   Installs the cardano-node, cardano-cli, "
+  echo_green "                               and cardano-submit-api binaries."
+  echo_green "  download-config-files        Downloads and patches the latest cardano config "
+  echo_green "                               files."
+  echo_green "  download-snapshot            Downloads the latest database snapshot from "
+  echo_green "                               csnapshots.io."
+  echo_green "  upgrade [version]            Upgrades binaries and downloads the latest "
+  echo_green "                               cardano config files."
   echo_green "  upgrade-self                 Upgrades to the latest version of this script."
   echo_green ""
   echo_green "Options:"
@@ -360,16 +361,18 @@ main() {
   # Proccess arguments and options.
   # (See: https://stackoverflow.com/a/62616466/6121420)
   if [[ "$#" != 0 ]]; then
-    set -- "$@" "${EOL}"
+    EOL=$(printf '\1\3\3\7')
+    set -- "$@" "$EOL"
 
-    while [[ "$1" != "${EOL}" ]]; do
+    while [[ "$1" != "$EOL" ]]; do
       opt="$1"
       shift
-      case "${opt}" in
+      case "$opt" in
 
       # Options processing.
       -h | --help)
-        echo_green "🧰 Convenience commands to update and cofigure the cardano-node, cardano-cli, and cardano-submit-api binaries."
+        echo_green "🧰 Convenience commands to update and cofigure the cardano-node, cardano-cli, "
+        echo_green "and cardano-submit-api binaries."
         usage
         exit 0
         ;;
@@ -397,31 +400,35 @@ main() {
 
       # Arguments processing.
       - | '' | [!-]*) # Positional argument, rotate to the end.
-        set -- "$@" "${opt}"
+        set -- "$@" "$opt"
         ;;
       --*=*) # Convert '--name=arg' to '--name' 'arg'.
         set -- "${opt%%=*}" "${opt#*=}" "$@"
         ;;
       -[!-]?*) # Convert '-abc' to '-a' '-b' '-c'.
-        set -- "$(echo "${opt#-}" | sed 's/\(.\)/ -\1/g')" "$@"
+        set -- $(echo "${opt#-}" | sed 's/\(.\)/ -\1/g') "$@"
         ;;
-      --) while [ "$1" != "$EOL" ]; do # Process remaining arguments as positional.
-        set -- "$@" "$1"
-        shift
-      done ;;
+      --)
+        while [ "$1" != "$EOL" ]; do
+          set -- "$@" "$1"
+          shift
+        done
+        ;;
       -*) # Catch misspelled options.
-        err "💥 Unknown option: '${opt}'"
+        err "💥 Unknown option: '$opt'"
         usage
         exit 2
         ;;
       *) # Sanity test for previous patterns.
-        err "💥 This should NEVER happen (${opt})"
+        err "💥 This should NEVER happen ($opt)"
         ;;
 
       esac
     done
     shift # $EOL
   fi
+
+  echo "Remaining args: $*"
 
   case "$1" in
   install-binaries)
