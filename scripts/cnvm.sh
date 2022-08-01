@@ -16,7 +16,7 @@
 
 # Constants
 SCRIPT="cnvm"
-SCRIPT_VERSION="1.0.0"
+SCRIPT_VERSION="1.0.1"
 REQUIRED_DEPENDENCIES=(curl grep jq lz4 sed tar unzip wget)
 DEFAULT_BINARIES_VERSION="1.34.1"
 
@@ -281,7 +281,7 @@ download_config_files() {
   # wget -N "https://hydra.iohk.io/build/${node_build_num}/download/1/${NODE_CONFIG}-topology.json" >/dev/null 2>&1
   wget -N https://raw.githubusercontent.com/input-output-hk/cardano-node/master/cardano-submit-api/config/tx-submit-mainnet-config.yaml >/dev/null 2>&1
 
-  if [[ $peer_to_peer == "Yes" ]]; then
+  if [[ $peer_to_peer == "Enabled" ]]; then
     echo_green "🤕 Patching ${NODE_CONFIG}-config.json with P2P support..."
     sed -i "${NODE_CONFIG}-config.json" \
       -e "s/TraceBlockFetchDecisions\": false/TraceBlockFetchDecisions\": true/g" \
