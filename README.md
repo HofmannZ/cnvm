@@ -23,19 +23,19 @@ Convenience alias to update your Cardano node binaries.
 Installs the cardano-node, cardano-cli, and cardano-submit-api binaries. Version defaults to `1.34.1`, use:
 
 ```sh
-cnvm install
+cnvm install-binaries
 ```
 
 or for a specific version:
 
 ```sh
-cnvm install 1.35.2
+cnvm install-binaries 1.35.2
 ```
 
 or with restart:
 
 ```sh
-cnvm install --restart
+cnvm install-binaries --restart
 ```
 
 #### $ cnvm download-config-files
