@@ -81,6 +81,7 @@ cnvm() {
 export -f cnvm
 
 source \"\${CNVM_HOME}/bash/aliases.sh\"
+# end of config for https://github.com/HofmannZ/cnvm
 " >>"${HOME}/.adaenv"
 
 echo_green "📡 Sourcing .adaenv..."
