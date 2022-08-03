@@ -410,6 +410,7 @@ main() {
         set -- "${opt%%=*}" "${opt#*=}" "$@"
         ;;
       -[!-]?*) # Convert '-abc' to '-a' '-b' '-c'.
+        # shellcheck disable=SC2046,SC2001
         set -- $(echo "${opt#-}" | sed 's/\(.\)/ -\1/g') "$@"
         ;;
       --)
