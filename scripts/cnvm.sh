@@ -555,6 +555,11 @@ main() {
   upgrade-self)
     upgrade_self
     ;;
+  *) # Catch misspelled command.
+    err "💥 Unknown command: '$1'"
+    usage
+    exit 2
+    ;;
   esac
 
   echo_green "✅ All done!"
