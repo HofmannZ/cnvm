@@ -20,7 +20,7 @@ Convenience alias to update your Cardano node binaries.
 
 #### $ cnvm install-binaries
 
-Installs the cardano-node, cardano-cli, and cardano-submit-api binaries. Version defaults to `1.34.1`, use:
+Installs the cardano-node, cardano-cli, and cardano-submit-api binaries. Version defaults to `1.35.3`, use:
 
 ```sh
 cnvm install-binaries
@@ -29,7 +29,7 @@ cnvm install-binaries
 or for a specific version:
 
 ```sh
-cnvm install-binaries 1.35.2
+cnvm install-binaries 1.34.1
 ```
 
 or with restart:
@@ -72,7 +72,7 @@ cnvm download-snapshot --restart
 
 #### $ cnvm upgrade
 
-Upgrades binaries and downloads the latest cardano config files. Optionally downloads the latest snapshot and patches for P2P. Version defaults to `1.34.1`, use:
+Upgrades binaries and downloads the latest cardano config files. Optionally downloads the latest snapshot and patches for P2P. Version defaults to `1.35.3`, use:
 
 ```sh
 cnvm upgrade
@@ -81,7 +81,7 @@ cnvm upgrade
 or for a specific version:
 
 ```sh
-cnvm upgrade 1.35.2
+cnvm upgrade 1.34.1
 ```
 
 or with snapshot:
@@ -105,7 +105,7 @@ cnvm upgrade --restart
 The underlying algorithm:
 
 1. Stop the cardano-node (Optional via `--restart` flag).
-2. Download the latest binaries (defaults to `1.34.1`).
+2. Download the latest binaries (defaults to `1.35.3`).
 3. Fetch the latest build number and save it to your `.adaenv`.
 4. Download the latest node files (with the exception of the topology file).
 5. Patches the configuration for P2P. (Optional via `--p2p` flag).

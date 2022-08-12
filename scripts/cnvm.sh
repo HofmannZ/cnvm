@@ -16,9 +16,9 @@
 
 # Constants
 SCRIPT="cnvm"
-SCRIPT_VERSION="1.1.0"
+SCRIPT_VERSION="1.2.0"
 REQUIRED_DEPENDENCIES=(curl grep jq lz4 sed tar unzip wget)
-DEFAULT_BINARIES_VERSION="1.34.1"
+DEFAULT_BINARIES_VERSION="1.35.3"
 
 # Colors
 RED='\033[0;31m'
