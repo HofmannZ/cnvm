@@ -1,8 +1,19 @@
-# Cardano node version manager
+# Cardano Node Version Manager
 
 Convenience commands for running a Cardano Node.
 
 > These scripts assume you followed the Armada Alliance [environment setup](https://armada-alliance.gitbook.io/welcome/stake-pool-guides/pi-pool-tutorial/pi-node-full-guide/environment-setup).
+
+## 🗄 Table of contents
+
+**[How to install](#how-to-install)**<br>
+**[How to use](#how-to-use)**<br>
+**└[cnvm](#cnvm)**<br>
+** └[install-binaries](#$-cnvm-install-binaries)**<br>
+** └[download-config-files](#$-cnvm-download-config-files)**<br>
+** └[download-snapshot](#$-cnvm-download-snapshot)**<br>
+** └[upgrade](#$-cnvm-upgrade)**<br>
+**└[sysup](#sysup)**<br>
 
 ## 🧰 How to install
 
@@ -52,7 +63,13 @@ or for P2P:
 cnvm download-config-files --p2p
 ```
 
-> It does **not** override your topology.
+> CNVM does **not** override your topology by default.
+
+Use with the `--topology` flag to override the topology:
+
+```sh
+cnvm download-config-files --topology
+```
 
 #### $ cnvm download-snapshot
 
@@ -62,13 +79,13 @@ Downloads the latest database snapshot from csnapshots.io. Use:
 cnvm download-snapshot
 ```
 
-or with restart:
+> Make use you have stopped you cardano-node!
+
+Or use with the `--restart` flag to automatically stop/start:
 
 ```sh
 cnvm download-snapshot --restart
 ```
-
-> Make use you have stopped you cardano-node! (The script will remind you when you run it.)
 
 #### $ cnvm upgrade
 
@@ -124,4 +141,4 @@ cnvm upgrade-self
 
 Convenience alias to update your system.
 
-> Wil run `sudo apt update && sudo apt upgrade -y` under the hood.
+> Wil run `sudo apt update && sudo apt upgrade -y`.
