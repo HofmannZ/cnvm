@@ -6,14 +6,14 @@ Convenience commands for running a Cardano Node.
 
 ## 🗄 Table of contents
 
-**[How to install](#how-to-install)**<br>
-**[How to use](#how-to-use)**<br>
-**└[cnvm](#cnvm)**<br>
-** └[install-binaries](#$-cnvm-install-binaries)**<br>
-** └[download-config-files](#$-cnvm-download-config-files)**<br>
-** └[download-snapshot](#$-cnvm-download-snapshot)**<br>
-** └[upgrade](#$-cnvm-upgrade)**<br>
-**└[sysup](#sysup)**<br>
+- [How to install](#how-to-install)
+- [How to use](#how-to-use)
+  - [cnvm](#cnvm)
+    - [install-binaries](#-cnvm-install-binaries)
+    - [download-config-files](#-cnvm-download-config-files)
+    - [download-snapshot](#-cnvm-download-snapshot)
+    - [upgrade](#-cnvm-upgrade)
+  - [sysup](#sysup)
 
 ## 🧰 How to install
 
