@@ -13,6 +13,7 @@ Convenience commands for running a Cardano Node.
     - [download-config-files](#-cnvm-download-config-files)
     - [download-snapshot](#-cnvm-download-snapshot)
     - [upgrade](#-cnvm-upgrade)
+    - [upgrade-self](#-cnvm-upgrade-self)
   - [sysup](#sysup)
 
 ## 🧰 How to install
