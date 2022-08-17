@@ -185,7 +185,7 @@ stop_cardano_node_service() {
   sleep 10
 
   echo_green "🛑 Stopping cardano-node..."
-  cardano-service stop
+  sudo systemctl stop cardano-node.service
 }
 
 #######################################
@@ -197,7 +197,7 @@ stop_cardano_node_service() {
 #######################################
 start_cardano_node_service() {
   echo_green "🚀 Starting Cardano node..."
-  cardano-service start
+  sudo systemctl start cardano-node.service
 }
 
 #######################################
