@@ -16,9 +16,9 @@
 
 # Constants
 SCRIPT="cnvm"
-SCRIPT_VERSION="1.2.0"
+SCRIPT_VERSION="1.3.0"
 REQUIRED_DEPENDENCIES=(curl grep jq lz4 sed tar unzip wget)
-DEFAULT_BINARIES_VERSION="1.35.3"
+DEFAULT_BINARIES_VERSION="8.9.1"
 
 # Colors
 RED='\033[0;31m'
@@ -234,6 +234,13 @@ install_binaries() {
   unzip "cardano-node-${binaries_version_for_download}.zip"
 
   echo_green "🗄 Moving latest binaries to bin... (type y to overide)"
+
+  if [[ $binaries_version_for_download =~ ^"8" ]]; then
+    mv cardano-node cardano-node/cardano-node
+    mv cardano-submit-api cardano-node/cardano-submit-api
+    mv cardano-cli cardano-node/cardano-cli
+  fi
+
   mv cardano-node/* "${HOME}/.local/bin"
   rm -r cardano*
 
