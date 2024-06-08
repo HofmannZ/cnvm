@@ -231,16 +231,14 @@ install_binaries() {
 
   echo_green "💽 Downloading the latest binaries..."
   wget -O "cardano-node-${binaries_version_for_download}.zip" "https://github.com/armada-alliance/cardano-node-binaries/blob/main/static-binaries/${binaries_version_for_download}.zip?raw=true" >/dev/null 2>&1
-  unzip "cardano-node-${binaries_version_for_download}.zip"
-
-  echo_green "🗄 Moving latest binaries to bin... (type y to overide)"
 
   if [[ $binaries_version_for_download =~ ^"8" ]]; then
-    mv cardano-node cardano-node/cardano-node
-    mv cardano-submit-api cardano-node/cardano-submit-api
-    mv cardano-cli cardano-node/cardano-cli
+    unzip "cardano-node-${binaries_version_for_download}.zip" -d cardano-node
+  else
+    unzip "cardano-node-${binaries_version_for_download}.zip"
   fi
 
+  echo_green "🗄 Moving latest binaries to bin... (type y to overide)"
   mv cardano-node/* "${HOME}/.local/bin"
   rm -r cardano*
 
