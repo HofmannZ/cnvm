@@ -316,9 +316,9 @@ download_config_files() {
   wget -N "https://book.world.dev.cardano.org/environments/${NODE_CONFIG}/submit-api-config.json" >/dev/null 2>&1
 
   if [[ $producer == "Yes" ]]; then
-    rm -f config-pb.json
-    wget -N "https://book.world.dev.cardano.org/environments/${NODE_CONFIG}/config-pb.json" >/dev/null 2>&1
-    mv config-pb.json config.json
+    rm -f config-bp.json
+    wget -N "https://book.world.dev.cardano.org/environments/${NODE_CONFIG}/config-bp.json" >/dev/null 2>&1
+    mv config-bp.json config.json
   else
     rm -f config.json
     wget -N "https://book.world.dev.cardano.org/environments/${NODE_CONFIG}/config.json" >/dev/null 2>&1
