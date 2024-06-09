@@ -16,9 +16,9 @@
 
 # Constants
 SCRIPT="cnvm"
-SCRIPT_VERSION="1.3.0"
-REQUIRED_DEPENDENCIES=(curl grep jq lz4 sed tar unzip wget)
-DEFAULT_BINARIES_VERSION="8.9.1"
+SCRIPT_VERSION="2.0.0"
+REQUIRED_DEPENDENCIES=(curl grep jq lz4 sed tar unzip wget zstd)
+DEFAULT_BINARIES_VERSION="8.9.3"
 
 # Colors
 RED='\033[0;31m'
@@ -130,7 +130,7 @@ usage() {
   echo_green "Options:"
   echo_green "  -h | --help                  Prints this usage help."
   echo_green "  -v | --version               Prints the software version."
-  echo_green "  --p2p                        Patches cofiguration for P2P topology."
+  echo_green "  --producer                   Changes the config for block producers."
   echo_green "  --topology                   Additionally downloads the default topology."
   echo_green "  --snapshot                   Additionally downloads the db snapshot."
   echo_green "  --restart                    Stops and starts the cardano-node service."
@@ -230,15 +230,12 @@ install_binaries() {
   cd "${HOME}/tmp" || exit 1
 
   echo_green "💽 Downloading the latest binaries..."
-  wget -O "cardano-node-${binaries_version_for_download}.zip" "https://github.com/armada-alliance/cardano-node-binaries/blob/main/static-binaries/${binaries_version_for_download}.zip?raw=true" >/dev/null 2>&1
 
-  if [[ $binaries_version_for_download =~ ^"8" ]]; then
-    unzip "cardano-node-${binaries_version_for_download}.zip" -d cardano-node
-  else
-    unzip "cardano-node-${binaries_version_for_download}.zip"
-  fi
+  wget -O "cardano-${binaries_version_for_download}-aarch64-static-musl-ghc_964.tar.zst" "https://github.com/armada-alliance/cardano-node-binaries/blob/main/static-binaries/cardano-${binaries_version_for_download}-aarch64-static-musl-ghc_964.tar.zst?raw=true" >/dev/null 2>&1
+  tar --zstd -xvf "cardano-${binaries_version_for_download}-aarch64-static-musl-ghc_964.tar.zst"
 
   echo_green "🗄 Moving latest binaries to bin... (type y to overide)"
+  mv "cardano-${binaries_version_for_download}-aarch64-static-musl-ghc_964" cardano-node
   mv cardano-node/* "${HOME}/.local/bin"
   rm -r cardano*
 
@@ -254,46 +251,37 @@ install_binaries() {
 #   None
 #######################################
 create_p2p_topology() {
+  local producer=$1 # Whether on not this is a block producer.
+
   local block_producer_ip
   local block_producer_port
 
-  echo_green "📋 Generating P2P topology..."
-  read -e -r -p "What is the Block Producer IP? " block_producer_ip
-  read -e -r -p "What is the Block Producer port? " block_producer_port
+  local relay_ip
+  local relay_port
 
-  echo "{
-  \"LocalRoots\": {
-    \"groups\": [
-      {
-        \"localRoots\": {
-          \"accessPoints\": [
-            {
-              \"address\": \"${block_producer_ip}\",
-              \"port\": ${block_producer_port}
-            }
-          ],
-          \"advertise\": false
-        },
-        \"valency\": 1
-      }
-    ]
-  },
-  \"PublicRoots\": [
-    {
-      \"publicRoots\": {
-        \"accessPoints\": [
-          {
-            \"address\": \"relays-new.cardano-${NODE_CONFIG}.iohk.io\",
-            \"port\": 3001
-          }
-        ],
-        \"advertise\": true
-      },
-      \"valency\": 1
-    }
-  ],
-  \"useLedgerAfterSlot\": 0
-}" >>"${NODE_CONFIG}-topology.json"
+  echo_green "📋 Generating P2P topology..."
+
+  if [[ $producer == "Yes" ]]; then
+    read -e -r -p "What is the Relay IP? " relay_ip
+    read -e -r -p "What is the Relay port? " relay_port
+
+    jq \
+      --arg relay_ip "${relay_ip}" \
+      --argjson relay_port "${relay_port}" \
+      'del(.bootstrapPeers) | .localRoots.[0].accessPoints.[0].address = $relay_ip | .localRoots.[0].accessPoints.[0].port = $relay_port | .useLedgerAfterSlot = -1' \
+      topology.json >topology-temp.json
+  else
+    read -e -r -p "What is the Block Producer IP? " block_producer_ip
+    read -e -r -p "What is the Block Producer port? " block_producer_port
+
+    jq \
+      --arg block_producer_ip "${block_producer_ip}" \
+      --argjson block_producer_port "${block_producer_port}" \
+      '.localRoots.[0].accessPoints.[0].address = $block_producer_ip | .localRoots.[0].accessPoints.[0].port = $block_producer_port' \
+      topology.json >topology-temp.json
+  fi
+
+  mv topology-temp.json topology.json
 }
 
 #######################################
@@ -303,14 +291,13 @@ create_p2p_topology() {
 #   NODE_FILES
 #   NODE_CONFIG
 # Arguments:
-#   P2P.
+#   Producer.
 #   Download topology.
 #######################################
 download_config_files() {
-  local peer_to_peer=$1      # Whether on not the config should be patched for p2p.
+  local producer=$1          # Whether on not this is a block producer.
   local download_topology=$2 # Whether on not the config should be patched for p2p.
   local currrent_dir         # The current directory.
-  local node_build_num       # The latest cardano-deployment build numbe.
 
   echo_green "🧰 Downloading the latest config files..."
 
@@ -320,45 +307,30 @@ download_config_files() {
   echo_green "📂 Moving to node files directory..."
   cd "${NODE_FILES}" || exit 1
 
-  echo_green "🔦 Fetching the latest build number..."
-  node_build_num=$(curl https://hydra.iohk.io/job/Cardano/iohk-nix/cardano-deployment/latest-finished/download/1/index.html | grep -e "build" | sed 's/.*build\/\([0-9]*\)\/download.*/\1/g')
-
-  echo_green "🤕 Patching the build number in .adaenv..."
-  sed -i "${HOME}/.adaenv" \
-    -e "s/NODE_BUILD_NUM=.*/NODE_BUILD_NUM=${node_build_num}/g"
-
-  # TODO(HofmannZ): add notice to reload other shells to get the latest build number
-  echo_green "📡 Sourcing .adaenv..."
-  source "${HOME}/.adaenv"
-
   echo_green "💽 Downloading the latest node files..."
-  wget -N "https://hydra.iohk.io/build/${node_build_num}/download/1/${NODE_CONFIG}-config.json" >/dev/null 2>&1
-  wget -N "https://hydra.iohk.io/build/${node_build_num}/download/1/${NODE_CONFIG}-byron-genesis.json" >/dev/null 2>&1
-  wget -N "https://hydra.iohk.io/build/${node_build_num}/download/1/${NODE_CONFIG}-shelley-genesis.json" >/dev/null 2>&1
-  wget -N "https://hydra.iohk.io/build/${node_build_num}/download/1/${NODE_CONFIG}-alonzo-genesis.json" >/dev/null 2>&1
-  wget -N https://raw.githubusercontent.com/input-output-hk/cardano-node/master/cardano-submit-api/config/tx-submit-mainnet-config.yaml >/dev/null 2>&1
+  wget -N "https://book.world.dev.cardano.org/environments/${NODE_CONFIG}/byron-genesis.json" >/dev/null 2>&1
+  wget -N "https://book.world.dev.cardano.org/environments/${NODE_CONFIG}/shelley-genesis.json" >/dev/null 2>&1
+  wget -N "https://book.world.dev.cardano.org/environments/${NODE_CONFIG}/alonzo-genesis.json" >/dev/null 2>&1
+  wget -N "https://book.world.dev.cardano.org/environments/${NODE_CONFIG}/conway-genesis.json" >/dev/null 2>&1
+  wget -N "https://book.world.dev.cardano.org/environments/${NODE_CONFIG}/submit-api-config.json" >/dev/null 2>&1
 
-  if [[ $peer_to_peer == "Enabled" ]]; then
-    # Download the default topology file.
-    if [[ $download_topology == "Yes" ]]; then
-      create_p2p_topology
-    fi
-
-    echo_green "🤕 Patching ${NODE_CONFIG}-config.json with P2P support..."
-    sed -i "${NODE_CONFIG}-config.json" \
-      -e "s/TraceBlockFetchDecisions\": false/TraceBlockFetchDecisions\": true/g" \
-      -e "s/127.0.0.1/0.0.0.0/g" \
-      -e "s+\"TurnOnLogging\": true,+\"TurnOnLogging\": true,\n  \"TestEnableDevelopmentNetworkProtocols\": true,\n  \"EnableP2P\": true,\n  \"MaxConcurrencyBulkSync\": 2,\n  \"MaxConcurrencyDeadline\": 4,\n  \"TargetNumberOfRootPeers\": 50,\n  \"TargetNumberOfKnownPeers\": 50,\n  \"TargetNumberOfEstablishedPeers\": 25,\n  \"TargetNumberOfActivePeers\": 10,+"
+  if [[ $producer == "Yes" ]]; then
+    wget -N "https://book.world.dev.cardano.org/environments/${NODE_CONFIG}/config-pb.json" >/dev/null 2>&1
+    mv config-pb.json config.json
   else
-    # Download the default topology file.
-    if [[ $download_topology == "Yes" ]]; then
-      wget -N "https://hydra.iohk.io/build/${node_build_num}/download/1/${NODE_CONFIG}-topology.json" >/dev/null 2>&1
-    fi
+    wget -N "https://book.world.dev.cardano.org/environments/${NODE_CONFIG}/config.json" >/dev/null 2>&1
+  fi
 
-    echo_green "🤕 Patching ${NODE_CONFIG}-config.json..."
-    sed -i "${NODE_CONFIG}-config.json" \
-      -e "s/TraceBlockFetchDecisions\": false/TraceBlockFetchDecisions\": true/g" \
-      -e "s/127.0.0.1/0.0.0.0/g"
+  echo_green "🤕 Patching config.json..."
+  sed -i "config.json" \
+    -e "s/TraceBlockFetchDecisions\": false/TraceBlockFetchDecisions\": true/g" \
+    -e "s/127.0.0.1/0.0.0.0/g"
+
+  # Download the default topology file.
+  if [[ $download_topology == "Yes" ]]; then
+    wget -N "https://book.world.dev.cardano.org/environments/${NODE_CONFIG}/topology.json" >/dev/null 2>&1
+
+    create_p2p_topology "${producer}"
   fi
 
   echo_green "✅ Restoring directory..."
@@ -428,7 +400,7 @@ main() {
     fi
   done
 
-  local peer_to_peer="Disabled"
+  local block_producer="No"
   local download_topology="No"
   local download_snapshot="No"
   local restart_cardano_node="No"
@@ -455,8 +427,8 @@ main() {
         version
         exit 0
         ;;
-      --p2p)
-        peer_to_peer="Enabled"
+      --producer)
+        block_producer="Yes"
         ;;
       --topology)
         download_topology="Yes"
@@ -521,7 +493,7 @@ main() {
     fi
     ;;
   download-config-files)
-    download_config_files "$peer_to_peer" "$download_topology"
+    download_config_files "$block_producer" "$download_topology"
     ;;
   download-snapshot)
 
@@ -547,7 +519,7 @@ main() {
     fi
 
     install_binaries "$binaries_version"
-    download_config_files "$peer_to_peer" "$download_topology"
+    download_config_files "$block_producer" "$download_topology"
 
     if [[ $download_snapshot == "Yes" ]]; then
       download_db_snapshot
