@@ -6,15 +6,17 @@ Convenience commands for running a Cardano Node.
 
 ## 🗄 Table of contents
 
-- [How to install](#how-to-install)
-- [How to use](#how-to-use)
-  - [cnvm](#cnvm)
-    - [install-binaries](#-cnvm-install-binaries)
-    - [download-config-files](#-cnvm-download-config-files)
-    - [download-snapshot](#-cnvm-download-snapshot)
-    - [upgrade](#-cnvm-upgrade)
-    - [upgrade-self](#-cnvm-upgrade-self)
-  - [sysup](#sysup)
+- [Cardano Node Version Manager](#cardano-node-version-manager)
+  - [🗄 Table of contents](#-table-of-contents)
+  - [🧰 How to install](#-how-to-install)
+  - [📚 How to use](#-how-to-use)
+    - [cnvm](#cnvm)
+      - [$ cnvm install-binaries](#-cnvm-install-binaries)
+      - [$ cnvm download-config-files](#-cnvm-download-config-files)
+      - [$ cnvm download-snapshot](#-cnvm-download-snapshot)
+      - [$ cnvm upgrade](#-cnvm-upgrade)
+      - [$ cnvm upgrade-self](#-cnvm-upgrade-self)
+    - [sysup](#sysup)
 
 ## 🧰 How to install
 
@@ -32,7 +34,7 @@ Convenience alias to update your Cardano node binaries.
 
 #### $ cnvm install-binaries
 
-Installs the cardano-node, cardano-cli, and cardano-submit-api binaries. Version defaults to `1.35.3`, use:
+Installs the cardano-node, cardano-cli, and cardano-submit-api binaries. Version defaults to `8.9.3`, use:
 
 ```sh
 cnvm install-binaries
@@ -41,7 +43,7 @@ cnvm install-binaries
 or for a specific version:
 
 ```sh
-cnvm install-binaries 1.34.1
+cnvm install-binaries 8.9.2
 ```
 
 or with restart:
@@ -52,16 +54,16 @@ cnvm install-binaries --restart
 
 #### $ cnvm download-config-files
 
-Downloads and patches the latest cardano config files. Defaults to normal topology, use:
+Downloads and patches the latest cardano config files. Defaults to relay, use:
 
 ```sh
 cnvm download-config-files
 ```
 
-or for P2P:
+or for Block Producer:
 
 ```sh
-cnvm download-config-files --p2p
+cnvm download-config-files --producer
 ```
 
 > CNVM does **not** override your topology by default.
@@ -90,7 +92,7 @@ cnvm download-snapshot --restart
 
 #### $ cnvm upgrade
 
-Upgrades binaries and downloads the latest cardano config files. Optionally downloads the latest snapshot and patches for P2P. Version defaults to `1.35.3`, use:
+Upgrades binaries and downloads the latest cardano config files. Optionally downloads the latest snapshot. Version defaults to `8.9.3`, use:
 
 ```sh
 cnvm upgrade
@@ -99,7 +101,7 @@ cnvm upgrade
 or for a specific version:
 
 ```sh
-cnvm upgrade 1.34.1
+cnvm upgrade 8.9.2
 ```
 
 or with snapshot:
@@ -108,10 +110,10 @@ or with snapshot:
 cnvm upgrade --snapshot
 ```
 
-or with p2p:
+or for Block Producer:
 
 ```sh
-cnvm upgrade --p2p
+cnvm upgrade --producer
 ```
 
 or with restart:
@@ -123,12 +125,10 @@ cnvm upgrade --restart
 The underlying algorithm:
 
 1. Stop the cardano-node (Optional via `--restart` flag).
-2. Download the latest binaries (defaults to `1.35.3`).
-3. Fetch the latest build number and save it to your `.adaenv`.
-4. Download the latest node files (with the exception of the topology file).
-5. Patches the configuration for P2P. (Optional via `--p2p` flag).
-6. Download the latest database snapshot from [csnapshots.io](https://csnapshots.io). (Optional via `--snapshot` flag).
-7. Start the cardano-node (Optional via `--restart` flag).
+2. Download the latest binaries (defaults to `8.9.3`).
+3. Download the latest node files (with the exception of the topology file).
+4. Download the latest database snapshot from [csnapshots.io](https://csnapshots.io). (Optional via `--snapshot` flag).
+5. Start the cardano-node (Optional via `--restart` flag).
 
 #### $ cnvm upgrade-self
 
