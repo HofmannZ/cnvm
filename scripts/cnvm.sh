@@ -268,7 +268,7 @@ create_p2p_topology() {
     jq \
       --arg relay_ip "${relay_ip}" \
       --argjson relay_port "${relay_port}" \
-      'del(.bootstrapPeers) | .localRoots.[0].accessPoints.[0].address = $relay_ip | .localRoots.[0].accessPoints.[0].port = $relay_port | .useLedgerAfterSlot = -1' \
+      'del(.bootstrapPeers) | .localRoots[0].accessPoints[0].address = $relay_ip | .localRoots[0].accessPoints[0].port = $relay_port | .useLedgerAfterSlot = -1' \
       topology.json >topology-temp.json
   else
     read -e -r -p "What is the Block Producer IP? " block_producer_ip
@@ -277,7 +277,7 @@ create_p2p_topology() {
     jq \
       --arg block_producer_ip "${block_producer_ip}" \
       --argjson block_producer_port "${block_producer_port}" \
-      '.localRoots.[0].accessPoints.[0].address = $block_producer_ip | .localRoots.[0].accessPoints.[0].port = $block_producer_port' \
+      '.localRoots[0].accessPoints[0].address = $block_producer_ip | .localRoots[0].accessPoints[0].port = $block_producer_port' \
       topology.json >topology-temp.json
   fi
 
@@ -308,6 +308,7 @@ download_config_files() {
   cd "${NODE_FILES}" || exit 1
 
   echo_green "💽 Downloading the latest node files..."
+  rm -f byron-genesis.json shelley-genesis.json alonzo-genesis.json conway-genesis.json submit-api-config.json
   wget -N "https://book.world.dev.cardano.org/environments/${NODE_CONFIG}/byron-genesis.json" >/dev/null 2>&1
   wget -N "https://book.world.dev.cardano.org/environments/${NODE_CONFIG}/shelley-genesis.json" >/dev/null 2>&1
   wget -N "https://book.world.dev.cardano.org/environments/${NODE_CONFIG}/alonzo-genesis.json" >/dev/null 2>&1
@@ -315,9 +316,11 @@ download_config_files() {
   wget -N "https://book.world.dev.cardano.org/environments/${NODE_CONFIG}/submit-api-config.json" >/dev/null 2>&1
 
   if [[ $producer == "Yes" ]]; then
+    rm -f config-pb.json
     wget -N "https://book.world.dev.cardano.org/environments/${NODE_CONFIG}/config-pb.json" >/dev/null 2>&1
     mv config-pb.json config.json
   else
+    rm -f config.json
     wget -N "https://book.world.dev.cardano.org/environments/${NODE_CONFIG}/config.json" >/dev/null 2>&1
   fi
 
@@ -328,6 +331,7 @@ download_config_files() {
 
   # Download the default topology file.
   if [[ $download_topology == "Yes" ]]; then
+    rm -f topology.json
     wget -N "https://book.world.dev.cardano.org/environments/${NODE_CONFIG}/topology.json" >/dev/null 2>&1
 
     create_p2p_topology "${producer}"
