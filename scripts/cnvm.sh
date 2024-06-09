@@ -327,6 +327,7 @@ download_config_files() {
   echo_green "🤕 Patching config.json..."
   sed -i "config.json" \
     -e "s/TraceBlockFetchDecisions\": false/TraceBlockFetchDecisions\": true/g" \
+    -e "s/TraceMempool\": false/TraceMempool\": true/g" \
     -e "s/127.0.0.1/0.0.0.0/g"
 
   # Download the default topology file.
