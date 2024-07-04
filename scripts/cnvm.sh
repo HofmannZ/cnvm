@@ -18,7 +18,7 @@
 SCRIPT="cnvm"
 SCRIPT_VERSION="2.0.0"
 REQUIRED_DEPENDENCIES=(curl grep jq lz4 sed tar unzip wget zstd)
-DEFAULT_BINARIES_VERSION="8.9.3"
+DEFAULT_BINARIES_VERSION="8.9.4"
 
 # Colors
 RED='\033[0;31m'
@@ -231,11 +231,11 @@ install_binaries() {
 
   echo_green "💽 Downloading the latest binaries..."
 
-  wget -O "cardano-${binaries_version_for_download}-aarch64-static-musl-ghc_964.tar.zst" "https://github.com/armada-alliance/cardano-node-binaries/blob/main/static-binaries/cardano-${binaries_version_for_download}-aarch64-static-musl-ghc_964.tar.zst?raw=true" >/dev/null 2>&1
-  tar --zstd -xvf "cardano-${binaries_version_for_download}-aarch64-static-musl-ghc_964.tar.zst"
+  wget -O "cardano-${binaries_version_for_download}-aarch64-static-musl-ghc_965.tar.zst" "https://github.com/armada-alliance/cardano-node-binaries/blob/main/static-binaries/cardano-${binaries_version_for_download}-aarch64-static-musl-ghc_965.tar.zst?raw=true" >/dev/null 2>&1
+  tar --zstd -xvf "cardano-${binaries_version_for_download}-aarch64-static-musl-ghc_965.tar.zst"
 
   echo_green "🗄 Moving latest binaries to bin... (type y to overide)"
-  mv "cardano-${binaries_version_for_download}-aarch64-static-musl-ghc_964" cardano-node
+  mv "cardano-${binaries_version_for_download}-aarch64-static-musl-ghc_965" cardano-node
   mv cardano-node/* "${HOME}/.local/bin"
   rm -r cardano*
 

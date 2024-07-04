@@ -34,7 +34,7 @@ Convenience alias to update your Cardano node binaries.
 
 #### $ cnvm install-binaries
 
-Installs the cardano-node, cardano-cli, and cardano-submit-api binaries. Version defaults to `8.9.3`, use:
+Installs the cardano-node, cardano-cli, and cardano-submit-api binaries. Version defaults to `8.9.4`, use:
 
 ```sh
 cnvm install-binaries
@@ -92,7 +92,7 @@ cnvm download-snapshot --restart
 
 #### $ cnvm upgrade
 
-Upgrades binaries and downloads the latest cardano config files. Optionally downloads the latest snapshot. Version defaults to `8.9.3`, use:
+Upgrades binaries and downloads the latest cardano config files. Optionally downloads the latest snapshot. Version defaults to `8.9.4`, use:
 
 ```sh
 cnvm upgrade
@@ -125,7 +125,7 @@ cnvm upgrade --restart
 The underlying algorithm:
 
 1. Stop the cardano-node (Optional via `--restart` flag).
-2. Download the latest binaries (defaults to `8.9.3`).
+2. Download the latest binaries (defaults to `8.9.4`).
 3. Download the latest node files (with the exception of the topology file).
 4. Download the latest database snapshot from [csnapshots.io](https://csnapshots.io). (Optional via `--snapshot` flag).
 5. Start the cardano-node (Optional via `--restart` flag).
